@@ -21,11 +21,29 @@
 	span {
 		border: 5px solid;
 	}
+	
+	
+	span.borderImage1 .borderImageSlice {
+		display: none;
+	}
+	span.borderImage1 .image1 {
+		display: block;
+	}
+	span .borderImageSlice {
+		display: none;
+	}
+	span .image0 {
+		display: block;
+	}
 </style>
 <script type="text/javascript">
     $(function(){
-		console.log($('#div').borderImage('url("border.png") 20'));
-		$('span').borderImage('url("tab.png") 5');
+		$('#div').borderImage('url("border.png") 20');
+		$('span').borderImage('url("tab.png") 5', 'tab2.png').mouseover(function(){
+			$(this).addClass('borderImage1');
+		}).mouseout(function(){
+			$(this).removeClass('borderImage1');
+		});
 	});
 	
 	setTimeout(function(){

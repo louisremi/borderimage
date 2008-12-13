@@ -26,61 +26,70 @@ else if(document.createElement('canvas').getContext) {
 }
 	
 $.fn.borderImage = function(value){	
-	// Use browsers native implemantation when available
-	if(/^-/.test(cap))
+	// Use browsers native implemantation when available, for single borderImage only.
+	if(/^-/.test(cap) && arguments.length == 1)
 		return $(this).css(cap+'BorderImage', value).css('backgroundColor', 'none');
 		
 	var result;
-	if(result = /url\(\s*"(([\w-]*).*?)"\s*\)\s*(\d+)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?/.exec(value)) {		
-		// First load the image
-		$('body').prepend('<img id="'+result[2]+'" src="'+result[1]+'" style="position:absolute; visibility:hidden" />');
+	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?/.exec(value)) {		
 		
+		arguments[0] = result[1];
 		var _this = this,
-			$img = $('#'+result[2]).load(function(){
+			imageWrapper = document.createDocumentFragment().appendChild(document.createElement('div'));
+		for(var i = 0; i<arguments.length; ++i){
+			var img = document.createElement('img');
+			img.src = arguments[i];
+			imageWrapper.appendChild(img);
+		}
+		imageWrapper.style.position = 'absolute';
+		imageWrapper.style.visibility = 'hidden';
+		$('body').prepend(imageWrapper);
+		
+		var $img = $('img:first', imageWrapper).load(function(){
 			// Convert all % cut
 			var imgHeight 	= $img.height(),
 				imgWidth	= $img.width(),
-				topCut 		= parseInt(result[3]) * (result[4]? imgHeight/100 : 1),
-				rightCut 	= result[5]? parseInt(result[5]) * (result[6]? imgWidth/100 : 1) : topCut,
-				bottomCut 	= result[7]? parseInt(result[7]) * (result[8]? imgHeight/100 : 1) : topCut,
-				leftCut		= result[9]? parseInt(result[9]) * (result[10]? imgWidth/100 : 1) : rightCut,
+				topCut 		= parseInt(result[2]) * (result[3]? imgHeight/100 : 1),
+				rightCut 	= result[4]? parseInt(result[4]) * (result[5]? imgWidth/100 : 1) : topCut,
+				bottomCut 	= result[6]? parseInt(result[6]) * (result[7]? imgHeight/100 : 1) : topCut,
+				leftCut		= result[8]? parseInt(result[8]) * (result[9]? imgWidth/100 : 1) : rightCut,
 				centerHeight= imgHeight -topCut -bottomCut,
 				centerWidth	= imgWidth -leftCut -rightCut,
-				imgs = [$img[0]],
+				image = imageWrapper.getElementsByTagName('img'),
 				// Draw all the slices
-				slice0 = drawSlice(0, 					0, 						leftCut, 		topCut, 		imgs),
-				slice1 = drawSlice(leftCut, 			0, 						centerWidth,	topCut, 		imgs),
-				slice2 = drawSlice(leftCut+centerWidth,	0, 						rightCut, 		topCut,			imgs),
-				slice3 = drawSlice(0, 					topCut, 				leftCut, 		centerHeight,	imgs),
-				slice4 = drawSlice(leftCut, 			topCut, 				centerWidth,	centerHeight,	imgs),
-				slice5 = drawSlice(leftCut+centerWidth,	topCut,					rightCut, 		centerHeight,	imgs),
-				slice6 = drawSlice(0, 					topCut+centerHeight,	leftCut, 		bottomCut,		imgs),
-				slice7 = drawSlice(leftCut,				topCut+centerHeight,	centerWidth,	bottomCut,		imgs),
-				slice8 = drawSlice(leftCut+centerWidth,	topCut+centerHeight,	rightCut, 		bottomCut,		imgs),
+				slice0 = drawSlice(0, 					0, 						leftCut, 		topCut, 		image),
+				slice1 = drawSlice(leftCut, 			0, 						centerWidth,	topCut, 		image),
+				slice2 = drawSlice(leftCut+centerWidth,	0, 						rightCut, 		topCut,			image),
+				slice3 = drawSlice(0, 					topCut, 				leftCut, 		centerHeight,	image),
+				slice4 = drawSlice(leftCut, 			topCut, 				centerWidth,	centerHeight,	image),
+				slice5 = drawSlice(leftCut+centerWidth,	topCut,					rightCut, 		centerHeight,	image),
+				slice6 = drawSlice(0, 					topCut+centerHeight,	leftCut, 		bottomCut,		image),
+				slice7 = drawSlice(leftCut,				topCut+centerHeight,	centerWidth,	bottomCut,		image),
+				slice8 = drawSlice(leftCut+centerWidth,	topCut+centerHeight,	rightCut, 		bottomCut,		image),
 				borderTop, borderRight, borderBottom, borderLeft,
 				prevFragment;
 				
-			function drawSlice(sx, sy, sw, sh, imgs) {
+			function drawSlice(sx, sy, sw, sh, image) {
 				var slice = document.createDocumentFragment();
-				for(var i = 0; i < imgs.length; ++i) {
+				for(var i = 0; i < image.length; ++i) {
 					if(cap == 'canvas') {
-						var el = document.createElement('img');
 						// Clear the global canvas and use it to draw a new slice
 						bicanvas.setAttribute('width', '30px');
-						bicanvas.getContext('2d').drawImage(imgs[i], sx, sy, sw, sh, 0, 0, 30, 30);
+						bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, 30, 30);
 						// Store the slice in an image in order to reuse it
+						var el = document.createElement('img');
 						el.src = bicanvas.toDataURL();						
 					} else {
 						// Could you explain me why we can't just use "document.createElement('biv:image')"?
 						var el = document.createElement('div');
 						el.insertAdjacentHTML('BeforeEnd', 
-							'<biv:image src="'+imgs[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />'
+							'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />'
 						);
 						el = el.firstChild;
 					}
 					el.style.width = el.style.height = '100%';
 					el.style.position = 'absolute';
-					el.className = 'type'+i;
+					el.className = 'borderImageSlice image'+i;
 					slice.appendChild(el);
 				}
 				return slice;
