@@ -14,29 +14,30 @@ else if(document.createElement('canvas').getContext) {
 	cap = 'canvas';
 	// Create a global canvas that will be used to draw the slices.
 	bicanvas = document.createElement('canvas');
-	bicanvas.setAttribute('height', '30px');
 } else {
 	cap = 'vml';
 	if (!document.namespaces['biv']) {
 		document.namespaces.add('biv', 'urn:schemas-microsoft-com:vml', "#default#VML");
-	}
-	if (!document.styleSheets['borderImage']) {
-        document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
+		document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
 	}
 }
 	
 $.fn.borderImage = function(value){	
-	// Use browsers native implemantation when available, for single borderImage only.
-	if(/^-/.test(cap) && arguments.length == 1)
-		return $(this).css(cap+'BorderImage', value).css('backgroundColor', 'none');
+	// Use browsers native implemantation when available.
+	if(/^-/.test(cap))
+		// For single borderImage only
+		return arguments.length == 1? $(this).css(cap+'BorderImage', value).css('backgroundColor', 'transparent') : $(this);
 		
 	var result;
 	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?/.exec(value)) {		
 		
 		arguments[0] = result[1];
 		var _this = this,
-			imageWrapper = document.createDocumentFragment().appendChild(document.createElement('div'));
-		for(var i = 0; i<arguments.length; ++i){
+			imageWrapper = document.createDocumentFragment().appendChild(document.createElement('div')),
+			argsLength = arguments.length,
+			// Use the last argument as resolution if it is a number, otherwise use defaults.
+			resolution = arguments[argsLength -1].constructor == Number? arguments[argsLength -1] : $.fn.borderImage.defaults.resolution;
+		for(var i = 0; i < argsLength && arguments[i].constructor == String; ++i){
 			var img = document.createElement('img');
 			img.src = arguments[i];
 			imageWrapper.appendChild(img);
@@ -46,7 +47,7 @@ $.fn.borderImage = function(value){
 		$('body').prepend(imageWrapper);
 		
 		var $img = $('img:first', imageWrapper).load(function(){
-			// Convert all % cut
+			// Compute cuts
 			var imgHeight 	= $img.height(),
 				imgWidth	= $img.width(),
 				topCut 		= parseInt(result[2]) * (result[3]? imgHeight/100 : 1),
@@ -71,26 +72,30 @@ $.fn.borderImage = function(value){
 				
 			function drawSlice(sx, sy, sw, sh, image) {
 				var slice = document.createDocumentFragment();
-				for(var i = 0; i < image.length; ++i) {
-					if(cap == 'canvas') {
-						// Clear the global canvas and use it to draw a new slice
-						bicanvas.setAttribute('width', '30px');
-						bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, 30, 30);
-						// Store the slice in an image in order to reuse it
-						var el = document.createElement('img');
-						el.src = bicanvas.toDataURL();						
-					} else {
-						// Could you explain me why we can't just use "document.createElement('biv:image')"?
-						var el = document.createElement('div');
-						el.insertAdjacentHTML('BeforeEnd', 
-							'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />'
-						);
-						el = el.firstChild;
+				// Don't waste time drawing slice with null dimension
+				if(sw > 0 && sh > 0) {
+					if(cap == 'canvas') bicanvas.setAttribute('height', resolution+'px');				
+					for(var i = 0; i < image.length; ++i) {
+						if(cap == 'canvas') {
+							// Clear the global canvas and use it to draw a new slice
+							bicanvas.setAttribute('width', resolution+'px');
+							bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, resolution, resolution);
+							// Store the slice in an image in order to reuse it
+							var el = document.createElement('img');
+							el.src = bicanvas.toDataURL();						
+						} else {
+							// Could you explain me why we can't just use "document.createElement('biv:image')"?
+							var el = document.createElement('div');
+							el.insertAdjacentHTML('BeforeEnd', 
+								'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />'
+							);
+							el = el.firstChild;
+						}
+						el.style.width = el.style.height = '100%';
+						el.style.position = 'absolute';
+						el.className = 'biSlice image'+i;
+						slice.appendChild(el);
 					}
-					el.style.width = el.style.height = '100%';
-					el.style.position = 'absolute';
-					el.className = 'borderImageSlice image'+i;
-					slice.appendChild(el);
 				}
 				return slice;
 			}
@@ -136,12 +141,15 @@ $.fn.borderImage = function(value){
 					var fragment = document.createDocumentFragment();
 					
 					function drawBorder(style, slice) {
-						var el = document.createElement('div');
-						for(var i in style)
-							el.style[i] = style[i];
-						el.style.position = 'absolute';
-						el.appendChild(slice.cloneNode(true));
-						fragment.appendChild(el);
+						// Don't waste time drawing borders with null dimension
+						if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
+							var el = document.createElement('div');
+							for(var i in style)
+								el.style[i] = style[i];
+							el.style.position = 'absolute';
+							el.appendChild(slice.cloneNode(true));
+							fragment.appendChild(el);
+						}						
 					}
 					
 					// Create the magical tiles
@@ -170,5 +178,9 @@ $.fn.borderImage = function(value){
 		if(cap != 'canvas') $(this)[0].appendChild(document.createElement('biv:image'));
 	}
 	return $(this);	
+};
+
+$.fn.borderImage.defaults = {
+	resolution: 20
 };
 })(jQuery);
