@@ -1,0 +1,83 @@
+<!DOCTYPE html>	
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<script type="text/javascript" src="jquery-1.2.6.js"></script>
+<script type="text/javascript" src="jquery.borderImage.js"></script>
+<style type="text/css">
+	body {
+		background-image: url("background2.png");
+	}
+	
+	
+	
+	span {
+		border: 5px solid;
+	}
+	
+	span .biSlice {
+		z-index: -4;
+	}
+	span .image0 {
+		z-index: -3;
+	}
+	span {
+		-moz-border-image: url("tab.png") 5;
+		-webkit-border-image: url("tab.png") 5;
+	}
+	span.bi1 .image1 {
+		z-index: -2;
+	}
+	span.bi1 {
+		-moz-border-image: url("tab2.png") 5;
+		-webkit-border-image: url("tab2.png") 5;
+	}	
+	span.bi2 .image2 {
+		z-index: -1;
+	}
+	span.bi2 {
+		-moz-border-image: url("tab3.png") 5;
+		-webkit-border-image: url("tab3.png") 5;
+	}	
+</style>
+<script type="text/javascript">
+    $(function(){
+		$('#div').borderImage('url("border.png") 20');
+		$('span').borderImage('url("tab.png") 5', 'tab2.png', 'tab3.png')
+		.mouseover(function(){
+			$(this).addClass('bi1')
+		}).mouseout(function(){
+			$(this).removeClass('bi1')
+		}).mousedown(function(){
+			$(this).addClass('bi2')
+		}).mouseup(function(){
+			$(this).removeClass('bi2')
+		});
+		$('#percent').borderImage('url("gradient.png") 10 10 0', 100);		
+	});
+	
+	setTimeout(function(){
+		//$('#div').css('height', '100px');
+	}, 5000)
+</script>
+
+</head>
+<body>
+    <div id="zob"></div>
+	<div id="div" style="margin:20px auto; width:400px; background-color:red; border: 20px solid black;">
+		<p style="color:rgb(254,192,203)">Et moi je veux dire des choses.</p>
+		<img src="pink.png" />
+	</div>
+	<span class="bi0"><a href="#">this is a text</a></span>
+	<span class="bi0"><a href="#">smaller text</a></span>
+	<span class="bi0"><a href="#">this is a longer text</a></span>
+	<span class="bi0"><a href="#">different</a></span>
+	<span class="bi0"><a href="#">size</a></span>
+	<span class="bi0"><a href="#">of</a></span>
+	<span class="bi0"><a href="#">text</a></span>
+	<div id="percent" style="margin:20px auto; width:200px;height:500px; background-color:red; border: solid green; border-width:10px 10px 1px;display:block;">
+		Et la c'est un autre essai de texte
+	</div>
+</body>
+</html>
