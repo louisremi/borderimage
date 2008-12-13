@@ -1,4 +1,12 @@
 (function($){
+/*
+ * jquery.borderImage - cross-browser implementation of borderImage CSS3 property
+ *
+ * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com))
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ */
 
 // snif browser capabilities
 var cap;
