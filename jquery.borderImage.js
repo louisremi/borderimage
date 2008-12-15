@@ -2,7 +2,7 @@
 /*
  * jquery.borderImage - cross-browser implementation of borderImage CSS3 property
  *
- * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com))
+ * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -34,7 +34,7 @@ $.fn.borderImage = function(value){
 	// Use browsers native implemantation when available.
 	if(/^-/.test(cap))
 		// For single borderImage only
-		return arguments.length == 1? $(this).css(cap+'BorderImage', value).css('backgroundColor', 'transparent') : $(this);
+		return (arguments[1] && arguments[1].constructor == String)? $(this) : $(this).css(cap+'BorderImage', value).css('backgroundColor', 'transparent');
 		
 	var result;
 	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?/.exec(value)) {		
@@ -101,6 +101,7 @@ $.fn.borderImage = function(value){
 						}
 						el.style.width = el.style.height = '100%';
 						el.style.position = 'absolute';
+						el.style.border = 'none';
 						el.className = 'biSlice image'+i;
 						slice.appendChild(el);
 					}
@@ -155,6 +156,7 @@ $.fn.borderImage = function(value){
 							for(var i in style)
 								el.style[i] = style[i];
 							el.style.position = 'absolute';
+							el.style.textAlign = 'left';
 							el.appendChild(slice.cloneNode(true));
 							fragment.appendChild(el);
 						}						
@@ -162,10 +164,10 @@ $.fn.borderImage = function(value){
 					
 					// Create the magical tiles
 					drawBorder({top:'-'+borderTop, left:'-'+borderLeft, height: borderTop, width: borderLeft}, 				slice0);
-					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop, zIndex: -1}, 					slice1);
+					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop, zIndex: -100}, 					slice1);
 					drawBorder({top:'-'+borderTop, right:'-'+borderRight, height: borderTop, width: borderRight}, 			slice2);									
 					drawBorder({top: 0, bottom:0, left:'-'+borderLeft, width: borderLeft, height: '100%'}, 					slice3);					
-					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%', zIndex: -1},			slice4);
+					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%', zIndex: -100},			slice4);
 					drawBorder({top: 0, bottom:0, right:'-'+borderRight, width: borderRight, height: '100%'}, 				slice5);									
 					drawBorder({bottom:'-'+borderBottom, left:'-'+borderLeft, width: borderLeft, height: borderBottom},		slice6);
 					drawBorder({bottom:'-'+borderBottom, left: 0, width:'100%', height: borderBottom}, 						slice7);
@@ -183,7 +185,7 @@ $.fn.borderImage = function(value){
 			});
 		});
 		// Could you explain me why we need that to have all the slices actually drawn...
-		if(cap != 'canvas') $(this)[0].appendChild(document.createElement('biv:image'));
+		if(cap != 'canvas') $('body')[0].appendChild(document.createElement('biv:image'));
 	}
 	return $(this);	
 };
