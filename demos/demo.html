@@ -1,83 +1,328 @@
 <!DOCTYPE html>	
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=7" />
-<script type="text/javascript" src="jquery-1.2.6.js"></script>
-<script type="text/javascript" src="jquery.borderImage.js"></script>
-<style type="text/css">
-	body {
-		background-image: url("background2.png");
-	}
-	
-	
-	
-	span {
-		border: 5px solid;
-	}
-	
-	span .biSlice {
-		z-index: -4;
-	}
-	span .image0 {
-		z-index: -3;
-	}
-	span {
-		-moz-border-image: url("tab.png") 5;
-		-webkit-border-image: url("tab.png") 5;
-	}
-	span.bi1 .image1 {
-		z-index: -2;
-	}
-	span.bi1 {
-		-moz-border-image: url("tab2.png") 5;
-		-webkit-border-image: url("tab2.png") 5;
-	}	
-	span.bi2 .image2 {
-		z-index: -1;
-	}
-	span.bi2 {
-		-moz-border-image: url("tab3.png") 5;
-		-webkit-border-image: url("tab3.png") 5;
-	}	
-</style>
-<script type="text/javascript">
-    $(function(){
-		$('#div').borderImage('url("border.png") 20');
-		$('span').borderImage('url("tab.png") 5', 'tab2.png', 'tab3.png')
-		.mouseover(function(){
-			$(this).addClass('bi1')
-		}).mouseout(function(){
-			$(this).removeClass('bi1')
-		}).mousedown(function(){
-			$(this).addClass('bi2')
-		}).mouseup(function(){
-			$(this).removeClass('bi2')
+	<title>borderImage demonstration page</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<script type="text/javascript" src="logic/json2.js"></script>
+    <script type="text/javascript" src="logic/jquery.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.core.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.blind.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.clip.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.drop.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.explode.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.fade.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.fold.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.scale.js"></script>
+	<script type="text/javascript" src="logic/ui/effects.slide.js"></script>
+	<script type="text/javascript" src="logic/ui/ui.core.js"></script>
+	<script type="text/javascript" src="logic/ui/ui.slider.js"></script>
+    <script type="text/javascript" src="logic/ui/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="logic/slideMe.core.js"></script>
+    <script type="text/javascript" src="logic/slideMe.helpers.js"></script>
+    <script type="text/javascript" src="logic/jquery.slideMe.js"></script>
+    <link type="text/css" rel="stylesheet" href="layout/style.css"/>
+	<script type="text/javascript" src="../jquery.borderImage.js"></script>
+	<link media="screen" type="text/css" href="layout.css" rel="stylesheet" />
+	<style type="text/css">
+		#title {
+			border: solid transparent;
+			border-width: 0 20px 20px;
+		}
+		
+		#content {
+			border: 10px solid transparent;			
+		}
+		
+		#sidebar {
+			border: solid transparent;
+			border-width: 10px 10px 0;
+		}
+		#flexible {
+			border: 20px solid transparent;
+		}
+		#buttons a {
+			border: solid transparent;
+			border-width: 0 8px;
+		}				
+				
+		#buttons a .biSlice {
+			z-index: -4;
+		}
+		#buttons a .image0 {
+			z-index: -3;
+		}
+		#buttons a {
+			-moz-border-image: url("button0.png") 0 5;
+			-webkit-border-image: url("button0.png") 0 5;
+		}
+		#buttons a.bi1 .image1 {
+			z-index: -2;
+		}
+		#buttons a.bi1 {
+			-moz-border-image: url("button1.png") 0 5;
+			-webkit-border-image: url("butto1.png") 0 5;
+		}	
+		#buttons a.bi2 .image2 {
+			z-index: -1;
+		}
+		#buttons a.bi2 {
+			-moz-border-image: url("button2.png") 0 5;
+			-webkit-border-image: url("button2.png") 0 5;
+		}	
+	</style>
+	<script type="text/javascript">
+	    $(function(){
+			$('#title').borderImage('url("titleShadow.png") 0 20 20')
+			
+			$('#sidebar').borderImage('url("gradient.png") 10 10 0', 100);
+			
+			$('#content').borderImage('url("shadow.png") 5');
+			
+			$('#flexible').borderImage('url("border.png") 20');
+			
+			$('#flex').toggle(function(){
+				$(this).parent().find('span').show('slow');
+			}, function(){
+				$(this).parent().find('span').hide('slow');
+			});			
+			
+			$('#buttons a').borderImage('url("button0.png") 0 5', 'button1.png', 'button2.png')
+			.mouseover(function(){
+				$(this).addClass('bi1')
+			}).mouseout(function(){
+				$(this).removeClass('bi1')
+			}).focus(function(){
+				$(this).addClass('bi2')
+			}).blur(function(){
+				$(this).removeClass('bi2')
+			});
 		});
-		$('#percent').borderImage('url("gradient.png") 10 10 0', 100);		
-	});
-	
-	setTimeout(function(){
-		//$('#div').css('height', '100px');
-	}, 5000)
-</script>
-
+	</script>
 </head>
 <body>
-    <div id="zob"></div>
-	<div id="div" style="margin:20px auto; width:400px; background-color:red; border: 20px solid black;">
-		<p style="color:rgb(254,192,203)">Et moi je veux dire des choses.</p>
-		<img src="pink.png" />
+	<h1 id="title">border<span style="color:red;">I</span>mage</h1>
+	<div id="page">
+		<div id="sidebar">
+			<p>
+				In the dark ages of table layouts, web pioneers used to build their
+				whole pages using heavy, unmaintainable, innaccessible
+				&lt;table&gt;s.
+			</p>
+			<p>
+				Then came css to relieve all designers with this simple promise: 
+				<em>Allowing a clear separation between the content and the layout</em>.
+				But it failed to save them from slicing images with their precious hands
+				and countless, meaningless &lt;div&gt;s to please our eyes.
+			</p>
+			<p>
+				Introducing CSS3 and the border-image property, your personnal design ninja.
+				It is now possible to decorate any container, button, element of a page
+				independently of it's position and dimensions in a flash.<br />
+				Unleash your creativity, just design and describe how you would have sliced;
+				sit back and let a ninja do the dirty job.
+			</p>
+		</div>
+		<div id="content">
+			<div class="sldmFonts">
+	            <span class="sldmFontA" data-width="803">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
+	            <span class="sldmFontT" data-width="704">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
+	            <span class="sldmFontC" data-width="1200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
+	            <span class="sldmFontG" data-width="863">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
+	            <span class="sldmFontV" data-width="924">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>            
+	        </div>
+	        <div class="sldmView">
+	            <div class="sldmPresentation">
+	                <div class="sldmSlide">
+	                    <script type="text/javascript">
+	                        j = {
+	                            "transition": [
+	                                {
+	                                    "effect": "slide",
+										"direction": "down"
+	                                }, {
+	                                    "effect": "slide",
+										"direction": "up"
+	                                }
+	                            ],
+	                            "animations": [
+	                                {
+										"type": "toggle"
+									},
+									{
+										"id": "e5",
+										"type": "toggle",
+										"o": {
+											"effect": "drop",
+											"direction": "right"
+										},
+										"trigger": "click"
+									}
+	                            ]
+	                        }
+	                    </script>
+	                    <img id="e3" class="sldmElement" src="media/greyline.png" style="display:block;top:22%;left:10%;width:80%;height:0.3%;">
+	                    <h1 id="e6" class="sldmElement sldmFontG" style="display:block; top:10.5%; left:10.5%;width:80%;height:16%;text-align:center;font-size:200%;color:red;">Meet The Ninja</h1>
+						<h1 id="e1" class="sldmElement sldmFontG" style="display:block; top:10%; left:10%;width:80%;height:16%;text-align:center;font-size:200%">Meet The Ninja</h1>
+						<img id="e5" class="sldmElement" src="media/katanas.png" style="display:block;top:38%;left:40%;width:20%;">
+						<p id="e7" class="sldmElement sldmFontG" style="display:block; bottom:15.5%; left:10.5%;width:80%;text-align:center;color:#ccc;">living in your Web pages</p>
+						<p id="e2" class="sldmElement sldmFontG" style="display:block; bottom:15%; left:10%;width:80%;text-align:center;">living in your Web pages</p>						
+	                </div>
+					<div class="sldmSlide">
+	                    <script type="text/javascript">
+	                        j = {
+	                            "transition": [
+	                                {
+	                                    "effect": "slide",
+										"direction": "down"
+	                                }, {
+	                                    "effect": "slide",
+										"direction": "up"
+	                                }
+	                            ],
+	                            "animations": [
+	                                {
+										"id": "e4 > li:eq(0)",
+										"type": "toggle",
+										"o": {
+											"effect": "fade"
+										}
+									},
+									{
+										"id": "e4 > li:eq(1)",
+										"type": "toggle",
+										"o": {
+											"effect": "fade"
+										},
+										"trigger": "click" 
+									},
+									{
+										"id": "e4 > li:eq(2)",
+										"type": "toggle",
+										"o": {
+											"effect": "fade"
+										},
+										"trigger": "click"
+									}
+	                            ]
+	                        }
+	                    </script>
+						<img id="e2" class="sldmElement" src="media/greyline.png" style="display:block;top:17%;left:7%;width:80%;height:0.3%;">
+						<h2 id="e1" class="sldmElement sldmFontG" style="display:block; top:7%; left:7%; width:80%;font-size:170%">borderImage</h2>
+	                    <ol id="e4" class="sldmElement sldmFontG" style="display:block; top:20%; left:10%;">
+							<li>Discovering the property
+							<ul>
+								<li>from the CSS3 draft</li>
+								<li>and some examples</li>
+							</ul></li>
+							<li>Discovering existing alternatives
+							<ul>
+								<li>using canvas</li>
+								<li>using vml</li>								
+							</ul></li>
+							<li>Discovering a first implementation
+							<ul>
+								<li>jquery.borderImage</li>
+								<li>what it can do</li>
+								<li>what it cannot do</li>
+							</ul>	
+							</li>
+						</ol>
+						<span style="position:absolute;display:block;bottom:5%;right:5%;color:#FF0000;font-size:150%;text-align:right;">01</span>
+	                </div>
+					<div class="sldmSlide">
+	                    <script type="text/javascript">
+	                        j = {
+	                            "transition": [
+	                                {
+	                                    "effect": "slide",
+										"direction": "down"
+	                                }, {
+	                                    "effect": "slide",
+										"direction": "up"
+	                                }
+	                            ],
+	                            "animations": [
+	                                {
+										"id": "e7",
+										"type": "toggle",
+										"o": {
+											"effect": "drop",
+											"direction": "left"
+										}
+									},
+									{
+										"id": "e7",
+										"type": "animate",
+										"o": {
+											"duration": 250,
+											"delay": 250
+										},
+										"css": {
+											"left": "50%"
+										},
+										"trigger": "click"
+									}
+	                            ]
+	                        }
+	                    </script>
+						<img id="e2" class="sldmElement" src="media/greyline.png" style="display:block;top:17%;left:7%;width:80%;height:0.3%;">
+						<h2 id="e1" class="sldmElement sldmFontG" style="display:block; top:7%; left:7%; width:80%;font-size:170%">Discover the property</h2>
+	                    <p id="e4" class="sldmElement sldmFontG" style="display:block; top:40%; left:3%;">#element {</p>
+						<p id="e5" class="sldmElement sldmFontG" style="display:block; top:45%; left:6%;">-X-border-image: url("image.png") 3 4 5 6 stretch</p>
+						<p id="e6" class="sldmElement sldmFontG" style="display:block; top:50%; left:3%;">}</p>
+						<img id="e7" class="sldmElement" src="media/closure.png" style="display:block;top:51%;left:5%;width:8%;">
+						<p id="e6" class="sldmElement sldmFontG" style="display:block; top:54%; left:5%;color:#888">The vendor prefix<br/><em>CSS3 is still a draft!</em></p>
+						<span style="position:absolute;display:block;bottom:5%;right:5%;color:#FF0000;font-size:150%;text-align:right;">02</span>
+	                </div>
+				</div>
+				<div class="sldmNavSlider"><div class="sldmHandle"></div></div>
+			</div>
+			<div class="sldmNavBar" href="#nogo">
+	            <ul class="sldmNavBar-ul">
+	                <li class="sldmNavBar-li"><a class="sldm109" href="#sldmThumb" title="switch to thumbnail"></a></li>
+	                <li class="sldmNavBar-li"><a class="sldm38" href="#sldmFr" title="go to previous slide"></a></li>
+	                <li class="sldmNavBar-li"><a class="sldm37" href="#vR" title="previous step"></a></li>
+	                <li class="sldmNavBar-li"><a class="sldm39" href="#sldmF" title="play/next step"></a></li>
+	                <li class="sldmNavBar-li"><a class="sldm40" href="#sldmFf" title="go to next slide"></a></li>
+	                <li class="sldmNavBar-li"><a class="sldm61" href="#nogo"></a></li>
+	            </ul>
+	        </div>
+		</div>
 	</div>
-	<span class="bi0"><a href="#">this is a text</a></span>
-	<span class="bi0"><a href="#">smaller text</a></span>
-	<span class="bi0"><a href="#">this is a longer text</a></span>
-	<span class="bi0"><a href="#">different</a></span>
-	<span class="bi0"><a href="#">size</a></span>
-	<span class="bi0"><a href="#">of</a></span>
-	<span class="bi0"><a href="#">text</a></span>
-	<div id="percent" style="margin:20px auto; width:200px;height:500px; background-color:red; border: solid green; border-width:10px 10px 1px;display:block;">
-		Et la c'est un autre essai de texte
-	</div>
+	
+	
+	
+    <!--<p>
+				Those demonstrations use very clean markup, only one image for each element and a single line of javascript,
+				based on the css property:
+			</p>
+<pre><code>#content {
+    border: 10px solid transparent;
+    border-image: url("shadow.png") 10;			
+}</code></pre>
+			<p>
+				To make this property work in all current browsers we can use JavaScript with canvas or vml.
+				The following line of code is all you need when using jQuery and the borderImage plugin.
+			</p>
+<pre><code>$('#content').borderImage('url("shadow.png") 10');</code></pre>
+			<p id="flexible">
+				Decorated elements are <button id="flex">flexible</button>.<br />
+				<span style="display:none;">You can change their dimensions by adding text and the decoration will follow.</span>
+			</p>
+			<p>
+				borderImage is not only useful for rounded-corners, shadows and gradients, 
+				is is also the perfect tool to design buttons.
+			</p>
+			<div id="buttons">
+				<a href="#nogo">first button</a>
+				<a href="#nogo">second button</a>
+				<a href="#nogo">a button</a>
+				<a href="#nogo">hover me</a>
+				<a href="#nogo">click me</a>
+			</div>
+			<p>
+				Learn how to use this property 
+			</p>-->
 </body>
 </html>
