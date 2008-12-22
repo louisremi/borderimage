@@ -1,0 +1,98 @@
+body {
+	font-family: Georgia, "Century Schoolbook L", serif;
+	text-align: justify;
+	padding: 0;
+	margin: 0 auto;
+	width: 960px;
+}
+
+#header {
+	margin-top: 60px;
+	width: 640px;
+}
+
+#header h1 {	
+	text-decoration: underline;
+}
+#header p {	
+	margin: 0 0 40px;
+}
+
+#content {
+	width: 620px;
+	padding: 0 5px;
+	border: 10px solid transparent;
+}
+
+#content h2.first {
+	margin-top: 0;
+}
+
+.float{
+	float: right;
+}
+
+#logo {
+	width: 280px;
+	position: relative;
+	bottom: 160px;
+}
+
+#sidebar {
+	width: 260px;
+	position: relative;
+	bottom: 140px;
+	border: 10px solid transparent;
+}
+
+#sidebar p:first-letter {
+	color: red;
+	font-weight: bold;
+}
+#sidebar p {
+	margin-top: 0;
+}
+
+/*#buttons {
+	text-align: center;
+}
+
+#buttons a, #buttons a:hover, #buttons a:visited {
+	color: black;
+	text-decoration: none;
+	outline: none;
+}*/
+
+
+
+
+
+code {
+	color: #800000;
+}
+
+a, a:visited {
+	color: red;
+	text-decoration: none;
+}
+a:hover {
+	color: red;
+	text-decoration: underline;
+}
+#content li {
+	line-height: 1.2em;
+	margin-top: 5px;
+}
+
+li .center {
+	margin-left: -3em;
+}
+
+.center {
+	display: block;
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}

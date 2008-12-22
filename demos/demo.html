@@ -4,90 +4,85 @@
 	<title>borderImage demonstration page</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-	<script type="text/javascript" src="logic/json2.js"></script>
-    <script type="text/javascript" src="logic/jquery.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.core.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.blind.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.clip.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.drop.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.explode.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.fade.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.fold.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.scale.js"></script>
-	<script type="text/javascript" src="logic/ui/effects.slide.js"></script>
-	<script type="text/javascript" src="logic/ui/ui.core.js"></script>
-	<script type="text/javascript" src="logic/ui/ui.slider.js"></script>
-    <script type="text/javascript" src="logic/ui/jquery.mousewheel.min.js"></script>
-    <script type="text/javascript" src="logic/slideMe.core.js"></script>
-    <script type="text/javascript" src="logic/slideMe.helpers.js"></script>
-    <script type="text/javascript" src="logic/jquery.slideMe.js"></script>
-    <link type="text/css" rel="stylesheet" href="layout/style.css"/>
+	<script type="text/javascript" src="logic/jquery-1.3b1.js"></script>
+	<script type="text/javascript" src="logic/demonstration.js"></script>
 	<script type="text/javascript" src="../jquery.borderImage.js"></script>
-	<link media="screen" type="text/css" href="layout.css" rel="stylesheet" />
+	<link media="screen" type="text/css" href="layout/layout.css" rel="stylesheet" />
 	<style type="text/css">
-		#title {
-			border: solid transparent;
-			border-width: 0 20px 20px;
-		}
-		
-		#content {
-			border: 10px solid transparent;			
-		}
-		
-		#sidebar {
-			border: solid transparent;
-			border-width: 10px 10px 0;
-		}
-		#flexible {
+		/*#flexible {
 			border: 20px solid transparent;
-		}
-		#buttons a {
+		}*/
+		
+		.button a {
 			border: solid transparent;
 			border-width: 0 8px;
+		}		
+		.button a:focus {
+			outline: none;
 		}				
-				
-		#buttons a .biSlice {
-			z-index: -4;
-		}
-		#buttons a .image0 {
-			z-index: -3;
-		}
-		#buttons a {
-			-moz-border-image: url("button0.png") 0 5;
-			-webkit-border-image: url("button0.png") 0 5;
-		}
-		#buttons a.bi1 .image1 {
-			z-index: -2;
-		}
-		#buttons a.bi1 {
-			-moz-border-image: url("button1.png") 0 5;
-			-webkit-border-image: url("butto1.png") 0 5;
-		}	
-		#buttons a.bi2 .image2 {
+		.button a .biSlice {
 			z-index: -1;
 		}
-		#buttons a.bi2 {
-			-moz-border-image: url("button2.png") 0 5;
-			-webkit-border-image: url("button2.png") 0 5;
+		.button a .image0 {
+			z-index: 0;
+		}
+		.button a {
+			-moz-border-image: url("media/button0.png") 0 5;
+			-webkit-border-image: url("media/button0.png") 0 5;
+		}
+		.button a.bi1 .image1 {
+			z-index: 0;
+		}
+		.button a.bi1 {
+			-moz-border-image: url("media/button1.png") 0 5;
+			-webkit-border-image: url("media/butto1.png") 0 5;
 		}	
+		.button a.bi2 .image2 {
+			z-index: 0;
+		}
+		.button a.bi2 {
+			-moz-border-image: url("media/button2.png") 0 5;
+			-webkit-border-image: url("media/button2.png") 0 5;
+		}
 	</style>
 	<script type="text/javascript">
-	    $(function(){
-			$('#title').borderImage('url("titleShadow.png") 0 20 20')
+	    $(document).ready(function(){
+			// Page layout
+			$('#sidebar').borderImage('url("media/gradient.png") 10 10 0', 100);			
+			$('#content').borderImage('url("media/shadow.png") 5');
 			
-			$('#sidebar').borderImage('url("gradient.png") 10 10 0', 100);
+			// Interactive demonstration
+			$('#innaccessible, #demonstration').css('display', 'inline');
+			backToOrigin();
+			var $demo = $('#demonstration').find('select').change(function(){
+				switchStretch();
+			});
 			
-			$('#content').borderImage('url("shadow.png") 5');
+			// Technical demonstrations
+			$('code.demo').each(function(i, el){
+				var $el = $(el),
+					$prev = $el.parent().parent().prev('div'),
+					result0 = /:\s*(.*?)\s*;/.exec($el.text()),
+					result1 = /:\s*([\d px]*)\s*;/.exec($prev.find('code').text()),
+					style = {
+						border: 'solid transparent',
+						borderWidth: result1[1]
+					};
+				if(result0[1] && result1[1]) {
+					$prev.find(':first').css(style);
+					setTimeout(function(){
+						$prev.find(':first').borderImage(result0[1]);
+					}, 200);
+				}				
+			});
 			
-			$('#flexible').borderImage('url("border.png") 20');
-			
-			$('#flex').toggle(function(){
+			/*$('#flex').toggle(function(){
 				$(this).parent().find('span').show('slow');
 			}, function(){
 				$(this).parent().find('span').hide('slow');
-			});			
+			});*/	
 			
-			$('#buttons a').borderImage('url("button0.png") 0 5', 'button1.png', 'button2.png')
+			$('#buttons a, .button a').borderImage('url("media/button0.png") 0 5', 'media/button1.png', 'media/button2.png')
 			.mouseover(function(){
 				$(this).addClass('bi1')
 			}).mouseout(function(){
@@ -101,228 +96,199 @@
 	</script>
 </head>
 <body>
-	<h1 id="title">border<span style="color:red;">I</span>mage</h1>
-	<div id="page">
-		<div id="sidebar">
-			<p>
-				In the dark ages of table layouts, web pioneers used to build their
-				whole pages using heavy, unmaintainable, innaccessible
-				&lt;table&gt;s.
-			</p>
-			<p>
-				Then came css to relieve all designers with this simple promise: 
-				<em>Allowing a clear separation between the content and the layout</em>.
-				But it failed to save them from slicing images with their precious hands
-				and countless, meaningless &lt;div&gt;s to please our eyes.
-			</p>
-			<p>
-				Introducing CSS3 and the border-image property, your personnal design ninja.
-				It is now possible to decorate any container, button, element of a page
-				independently of it's position and dimensions in a flash.<br />
-				Unleash your creativity, just design and describe how you would have sliced;
-				sit back and let a ninja do the dirty job.
-			</p>
-		</div>
-		<div id="content">
-			<div class="sldmFonts">
-	            <span class="sldmFontA" data-width="803">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
-	            <span class="sldmFontT" data-width="704">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
-	            <span class="sldmFontC" data-width="1200">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
-	            <span class="sldmFontG" data-width="863">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>
-	            <span class="sldmFontV" data-width="924">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eeeeeeeeeeeetttttttttaaaaaaaaoooooooiiiiiiinnnnnnsssssshhhhhhrrrrrrddddllllcccuuummwwffggyyppbvk</span>            
-	        </div>
-	        <div class="sldmView">
-	            <div class="sldmPresentation">
-	                <div class="sldmSlide">
-	                    <script type="text/javascript">
-	                        j = {
-	                            "transition": [
-	                                {
-	                                    "effect": "slide",
-										"direction": "down"
-	                                }, {
-	                                    "effect": "slide",
-										"direction": "up"
-	                                }
-	                            ],
-	                            "animations": [
-	                                {
-										"type": "toggle"
-									},
-									{
-										"id": "e5",
-										"type": "toggle",
-										"o": {
-											"effect": "drop",
-											"direction": "right"
-										},
-										"trigger": "click"
-									}
-	                            ]
-	                        }
-	                    </script>
-	                    <img id="e3" class="sldmElement" src="media/greyline.png" style="display:block;top:22%;left:10%;width:80%;height:0.3%;">
-	                    <h1 id="e6" class="sldmElement sldmFontG" style="display:block; top:10.5%; left:10.5%;width:80%;height:16%;text-align:center;font-size:200%;color:red;">Meet The Ninja</h1>
-						<h1 id="e1" class="sldmElement sldmFontG" style="display:block; top:10%; left:10%;width:80%;height:16%;text-align:center;font-size:200%">Meet The Ninja</h1>
-						<img id="e5" class="sldmElement" src="media/katanas.png" style="display:block;top:38%;left:40%;width:20%;">
-						<p id="e7" class="sldmElement sldmFontG" style="display:block; bottom:15.5%; left:10.5%;width:80%;text-align:center;color:#ccc;">living in your Web pages</p>
-						<p id="e2" class="sldmElement sldmFontG" style="display:block; bottom:15%; left:10%;width:80%;text-align:center;">living in your Web pages</p>						
-	                </div>
-					<div class="sldmSlide">
-	                    <script type="text/javascript">
-	                        j = {
-	                            "transition": [
-	                                {
-	                                    "effect": "slide",
-										"direction": "down"
-	                                }, {
-	                                    "effect": "slide",
-										"direction": "up"
-	                                }
-	                            ],
-	                            "animations": [
-	                                {
-										"id": "e4 > li:eq(0)",
-										"type": "toggle",
-										"o": {
-											"effect": "fade"
-										}
-									},
-									{
-										"id": "e4 > li:eq(1)",
-										"type": "toggle",
-										"o": {
-											"effect": "fade"
-										},
-										"trigger": "click" 
-									},
-									{
-										"id": "e4 > li:eq(2)",
-										"type": "toggle",
-										"o": {
-											"effect": "fade"
-										},
-										"trigger": "click"
-									}
-	                            ]
-	                        }
-	                    </script>
-						<img id="e2" class="sldmElement" src="media/greyline.png" style="display:block;top:17%;left:7%;width:80%;height:0.3%;">
-						<h2 id="e1" class="sldmElement sldmFontG" style="display:block; top:7%; left:7%; width:80%;font-size:170%">borderImage</h2>
-	                    <ol id="e4" class="sldmElement sldmFontG" style="display:block; top:20%; left:10%;">
-							<li>Discovering the property
-							<ul>
-								<li>from the CSS3 draft</li>
-								<li>and some examples</li>
-							</ul></li>
-							<li>Discovering existing alternatives
-							<ul>
-								<li>using canvas</li>
-								<li>using vml</li>								
-							</ul></li>
-							<li>Discovering a first implementation
-							<ul>
-								<li>jquery.borderImage</li>
-								<li>what it can do</li>
-								<li>what it cannot do</li>
-							</ul>	
-							</li>
-						</ol>
-						<span style="position:absolute;display:block;bottom:5%;right:5%;color:#FF0000;font-size:150%;text-align:right;">01</span>
-	                </div>
-					<div class="sldmSlide">
-	                    <script type="text/javascript">
-	                        j = {
-	                            "transition": [
-	                                {
-	                                    "effect": "slide",
-										"direction": "down"
-	                                }, {
-	                                    "effect": "slide",
-										"direction": "up"
-	                                }
-	                            ],
-	                            "animations": [
-	                                {
-										"id": "e7",
-										"type": "toggle",
-										"o": {
-											"effect": "drop",
-											"direction": "left"
-										}
-									},
-									{
-										"id": "e7",
-										"type": "animate",
-										"o": {
-											"duration": 250,
-											"delay": 250
-										},
-										"css": {
-											"left": "50%"
-										},
-										"trigger": "click"
-									}
-	                            ]
-	                        }
-	                    </script>
-						<img id="e2" class="sldmElement" src="media/greyline.png" style="display:block;top:17%;left:7%;width:80%;height:0.3%;">
-						<h2 id="e1" class="sldmElement sldmFontG" style="display:block; top:7%; left:7%; width:80%;font-size:170%">Discover the property</h2>
-	                    <p id="e4" class="sldmElement sldmFontG" style="display:block; top:40%; left:3%;">#element {</p>
-						<p id="e5" class="sldmElement sldmFontG" style="display:block; top:45%; left:6%;">-X-border-image: url("image.png") 3 4 5 6 stretch</p>
-						<p id="e6" class="sldmElement sldmFontG" style="display:block; top:50%; left:3%;">}</p>
-						<img id="e7" class="sldmElement" src="media/closure.png" style="display:block;top:51%;left:5%;width:8%;">
-						<p id="e6" class="sldmElement sldmFontG" style="display:block; top:54%; left:5%;color:#888">The vendor prefix<br/><em>CSS3 is still a draft!</em></p>
-						<span style="position:absolute;display:block;bottom:5%;right:5%;color:#FF0000;font-size:150%;text-align:right;">02</span>
-	                </div>
-				</div>
-				<div class="sldmNavSlider"><div class="sldmHandle"></div></div>
-			</div>
-			<div class="sldmNavBar" href="#nogo">
-	            <ul class="sldmNavBar-ul">
-	                <li class="sldmNavBar-li"><a class="sldm109" href="#sldmThumb" title="switch to thumbnail"></a></li>
-	                <li class="sldmNavBar-li"><a class="sldm38" href="#sldmFr" title="go to previous slide"></a></li>
-	                <li class="sldmNavBar-li"><a class="sldm37" href="#vR" title="previous step"></a></li>
-	                <li class="sldmNavBar-li"><a class="sldm39" href="#sldmF" title="play/next step"></a></li>
-	                <li class="sldmNavBar-li"><a class="sldm40" href="#sldmFf" title="go to next slide"></a></li>
-	                <li class="sldmNavBar-li"><a class="sldm61" href="#nogo"></a></li>
-	            </ul>
-	        </div>
+<div id="header">
+	<h1>Meet the ninja living in your browser</h1>
+	<p><a href="http://www.w3.org/Style/CSS/current-work#CSS3">CSS3 draft</a> introduced, amongst many properties
+	that will change Web designer's life, one that could be terribly powerfull once you get familiar with it: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
+	Discover what it can do for you, today.</p>
+	
+</div>
+<div class="float">
+	<div id="logo"><img src="media/logo.png" alt="logo of borderImage: a ninja slicing an image" style="width:100%" /></div>
+	<div id="sidebar">
+		<p>
+			In the dark ages of table layouts, Web pioneers used to build their
+			whole pages using heavy, unmaintainable, innaccessible
+			&lt;table&gt;s.
+		</p>
+		<p>
+			Then came css to relieve all designers with this simple promise: 
+			<em>Allowing a clear separation between the content and the layout</em>.
+			But it failed to save them from slicing images with their precious hands
+			and countless, meaningless &lt;div&gt;s to please our eyes.
+		</p>
+		<p>
+			Introducing CSS3 and the border-image property, your personnal design ninja.
+			It is now possible to decorate any container, element of a page
+			independently of it's position and dimensions in a flash.
+			Just design and describe how you would have sliced;
+			sit back and let a ninja do the dirty job.
+		</p>
+	</div>
+</div>
+	
+<div id="content">
+	<h2 class="first">Learn its code</h2>
+	<p>Let's start with a simple example to see how you can invoke and give instructions to the border-image ninja:</p>
+<pre><code>#element {
+    border-width: 10px 15px 12px 13px;
+    border-image: url("border.png") 30% 35% 40% 30% round round;
+}</code></pre>
+	<p>
+		The first property obviously describe one element's borders as we are used to: 
+		the widths of the four borders are expressed in pixels, <strong>clockwise</strong> 
+		(<i>border-top</i>, <i>border-right</i>, <i>border-bottom</i>, <i>border-left</i>).
+	</p>
+	<span class="center"><img src="media/clock.png" alt="clock"></span>
+	<p>
+		There is probably no need to remember you that by using this syntax, if you ommit to specify the border-left width,
+		the browser uses the border-right value; if you ommit the border-bottom value it uses the border-top value
+		and if you specify only one value, it will be used for your four borders.
+	</p>
+<pre class="float" style="margin-top: 0;"><code>#element {
+    border-width: 12px 12px;
+    /* Is equivalent to */
+    border-width: 12px;
+}</code></pre>
+<pre><code>#element {
+    border-width: 10px 15px 10px 15px;
+    /* Is equivalent to */
+    border-width: 10px 15px;
+}</code></pre>
+	<p>
+		Well, if you do know that, you will be able to understand the most important part of the border-image property.
+	</p>
+	<p>
+		The second property is the one which will actually invoke our zealous ninja.
+		There is usually three part in a border-image property (although if you read carefully the specification, you will
+		find a fourth one which would only be confusing at this point):
+	</p>
+	<ol>
+		<li>
+			<pre><code>url("border.png")</code></pre>
+			This part indicate the location of the image that will be sliced to decorate our element. 
+			Nothing really original here, background-image use the same syntax. And this is our image:
+			<span class="center"><img src="media/border.png" alt="the image that we are gonna slice"></span>
+		</li>
+		<li>
+			<pre><code>30% 35% 40% 30%</code></pre>
+			The second part describe the way our ninja will slice the image into nine parts (<i>slices</i>). 
+			As "<em>an image worth a thousand words</em>":
+			<span class="center">
+				<img src="media/sliceHere.png" alt="instructions for our ninja to cut the image"><br/>
+				<i>Guess what will happen to this poor image... (hint: ninjas are merciless).</i><br/>
+			</span>
+			Those values can be expressed either in percentage 
+			or without any unit to slice an exact width of pixels from the image.
+		</li>		
+		<li>
+			<pre><code>round round</code></pre>
+			The last part is the <i>stretch value</i>. It describes how the slices for the sides and the middle part are scaled and tiled.
+			Few things to rememenber before trying to understand what it does:
+			<ul>
+				<li>Specifying only one value is the same as specifying twice the same one.</li>
+				<li>There is three possible values: "<i>stretch</i>", "<i>repeat</i>" and "<i>round</i>".</li>
+				<li>The default value is "<i>stretch</i>".</li>
+			</ul>					 
+		</li>
+	</ol>
+	<p id="innaccessible" style="display:none;">
+		This is the most complex part of the specification so it deserves an interactive demonstration:
+	</p>			
+	<div id="demonstration" style="display:none;">
+		<span class="center"><img src="media/diamonds.png" /></span>
+<pre><code>div#demo {
+    border: solid transparent;
+    border-width: 20px 30px 25px 20px;
+    border-image: url("diamonds.png") 33% <select><option value="">choose<option value="stretch">stretch<option value="repeat">repeat<option value="round">round</select>				
+}</code></pre>
+		<div id="container" style="position:relative;height:112px;width:138px;border: solid red; border-width:20px 30px 25px 20px;margin: 0 auto;">					
 		</div>
 	</div>
-	
-	
-	
-    <!--<p>
-				Those demonstrations use very clean markup, only one image for each element and a single line of javascript,
-				based on the css property:
-			</p>
-<pre><code>#content {
-    border: 10px solid transparent;
-    border-image: url("shadow.png") 10;			
-}</code></pre>
-			<p>
-				To make this property work in all current browsers we can use JavaScript with canvas or vml.
-				The following line of code is all you need when using jQuery and the borderImage plugin.
-			</p>
-<pre><code>$('#content').borderImage('url("shadow.png") 10');</code></pre>
-			<p id="flexible">
-				Decorated elements are <button id="flex">flexible</button>.<br />
-				<span style="display:none;">You can change their dimensions by adding text and the decoration will follow.</span>
-			</p>
-			<p>
-				borderImage is not only useful for rounded-corners, shadows and gradients, 
-				is is also the perfect tool to design buttons.
-			</p>
-			<div id="buttons">
-				<a href="#nogo">first button</a>
-				<a href="#nogo">second button</a>
-				<a href="#nogo">a button</a>
-				<a href="#nogo">hover me</a>
-				<a href="#nogo">click me</a>
-			</div>
-			<p>
-				Learn how to use this property 
-			</p>-->
+	<p>
+		If you are too curious and want to know what happens when using borders with null width, or when using two different "stretch" values,
+		it's worse reading the <a href="http://www.w3.org/TR/css3-background/#the-border-image">original specification</a> (one can never be too curious).
+	</p>
+	<h2>See what it can do</h2>
+	<p>
+		You have the ressources to be creative, imaginative and you certainly have an opinion about beauty. 
+		The border-image ninja doesn't know anything about that, it is just really good at martial techniques, 
+		it is only a tool allowing you to express yourself. Here is what it can do when asked for some purely technical demonstrations:
+	</p>
+	<h3>Rounded corners</h3>
+	<div class="float right">
+		<span style="color:white;">borderImage</span>
+		<pre><code>border-width: 10px;</code></pre>
+	</div>
+	<div>
+		<img src="media/roundedCorner.png" alt="a source image to slice">
+		<pre><code class="demo">border-image: url("media/roundedCorner.png") 20;</code></pre>
+	</div>
+	<h3>Complex borders</h3>
+	<div class="float right">
+		<span>ninja!</span>
+		<pre><code>border-width: 20px;</code></pre>
+	</div>
+	<div>
+		<img src="media/border.png" alt="a source image to slice">
+		<pre><code class="demo">border-image: url("media/border.png") 20;</code></pre>
+	</div>
+	<h3>Drop shadow</h3>
+	<div class="float right">
+		<span style="color: red;">wooooosh</span>
+		<pre><code>border-width: 10px;</code></pre>
+	</div>
+	<div>
+		<img src="media/blackShadow.png" alt="a source image to slice">
+		<pre><code class="demo">border-image: url("media/blackShadow.png") 5;</code></pre>
+	</div>
+	<h3>Tab</h3>
+	<div class="float right">
+		<span style="color: white;">katanas</span>
+		<pre><code>border-width: 15px 20px 0;</code></pre>
+	</div>
+	<div>
+		<img src="media/tab.png" alt="a source image to slice">
+		<pre><code class="demo">border-image: url("media/tab.png") 20 20 0;</code></pre>
+	</div>
+	<h3>Stretching background</h3>
+	<div class="float center">
+		<div style="color: white; width: 50px;">learn<br/>to be<br/><span style="color: #aaa;">lazy</span></div>
+		<pre><code>border-width: 10px 10px 0;</code></pre>
+	</div>
+	<div>
+		<img src="media/gradient.png" alt="a source image to slice">
+		<pre><code class="demo">border-image: url("media/gradient.png") 10 10 0;</code></pre>
+	</div>
+	<h3>And even multi-state buttons</h3>
+	<div class="float right">
+		<span class="button"><a href="#nogo">hover & click</a></span>
+		<pre><code>But not impossible.</code></pre>
+	</div>
+	<div>
+		<img src="media/button0.png" alt="a source image to slice"> <img src="media/button1.png" alt="a source image to slice"> <img src="media/button2.png" alt="a source image to slice">
+		<pre><code>This one is tricky.</code></pre>
+	</div>
+	<h2>Start using it today</h2>
+	<p>
+		Currently this property is only implemented in the upcoming Firefox3.1 and recent releases of Safari and Chrome.
+		However, most current browsers implement features that are able to slice images:
+	</p>
+	<ul>
+		<li>The <a href="http://www.whatwg.org/specs/web-apps/current-work/#canvas">canvas element</a> and its <a href="http://www.whatwg.org/specs/web-apps/current-work/#dom-context-2d-drawimage">drawImage</a> method,
+			available in firefox2+ (and even earlier) and recent releases of opera browser.
+		</li>
+		<li>
+			<a href="http://msdn.microsoft.com/en-us/library/bb263898(VS.85).aspx">VML</a> and its <a href="http://msdn.microsoft.com/en-us/library/bb229512(VS.85).aspx">image element</a> 
+			available in ie6+ (and even earlier).
+		</li>
+	</ul>
+	<p>
+		All we have to do once the image is sliced is to use the slices to create the tile that suit our needs.
+		Although it is theoritically possible to implement both the "repeat" and "round" value, it is not reasonnable
+		to do it for performance reasons.<br/>
+		With some optimisation, "stretch" can be implemented, though.
+	</p>
+</div>
 </body>
 </html>

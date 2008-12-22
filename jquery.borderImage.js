@@ -1,6 +1,6 @@
 (function($){
 /*
- * jquery.borderImage - cross-browser implementation of borderImage CSS3 property
+ * jquery.borderImage - cross-browser implementation of CSS3's borderImage property
  *
  * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -8,7 +8,7 @@
  *
  */
 
-// snif browser capabilities
+// Snif browser capabilities.
 var cap;
 // WebKit 525+ (and probably earlier) and Gecko 1.9.1+ can handle borderImage properly.
 // We could be smarter and avoid using evil browser sniffing to detect if borderImage is implemented 
@@ -30,31 +30,32 @@ else if(document.createElement('canvas').getContext) {
 	}
 }
 	
-$.fn.borderImage = function(value){	
+$.fn.borderImage = function(value){
 	// Use browsers native implemantation when available.
 	if(/^-/.test(cap))
 		// For single borderImage only
 		return (arguments[1] && arguments[1].constructor == String)? $(this) : $(this).css(cap+'BorderImage', value).css('backgroundColor', 'transparent');
-		
+	
 	var result;
-	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?\s*(\d*)(%)?(?:px)?/.exec(value)) {		
-		
+  	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?\s*(\d*)(%)?\s*(\d*)(%)?\s*(\d*)(%)?/.exec(value)) {    
+        
 		arguments[0] = result[1];
-		var _this = this,
-			imageWrapper = document.createDocumentFragment().appendChild(document.createElement('div')),
-			argsLength = arguments.length,
-			// Use the last argument as resolution if it is a number, otherwise use defaults.
-			resolution = arguments[argsLength -1].constructor == Number? arguments[argsLength -1] : $.fn.borderImage.defaults.resolution;
-		for(var i = 0; i < argsLength && arguments[i].constructor == String; ++i){
-			var img = document.createElement('img');
-			img.src = arguments[i];
-			imageWrapper.appendChild(img);
-		}
-		imageWrapper.style.position = 'absolute';
-		imageWrapper.style.visibility = 'hidden';
-		$('body').prepend(imageWrapper);
-		
-		var $img = $('img:first', imageWrapper).load(function(){
+	    var _this = this,
+	      imageWrapper = document.createDocumentFragment().appendChild(document.createElement('div')),
+	      argsLength = arguments.length,
+	      // Use the last argument as resolution if it is a number, otherwise use defaults.
+	      resolution = arguments[argsLength -1].constructor == Number? arguments[argsLength -1] : $.fn.borderImage.defaults.resolution;
+	    for(var i = 0; i < argsLength && arguments[i].constructor == String; ++i){
+	    	var img = document.createElement('img');
+	      	img.src = arguments[i];
+			// If we don't clone the image, load event may not be fired in IE!
+	      	imageWrapper.appendChild(img.cloneNode(true));
+	    }
+	    imageWrapper.style.position = 'absolute';
+	    imageWrapper.style.visibility = 'hidden';
+	    $('body').prepend(imageWrapper);
+    
+    	var $img = $('img:first', imageWrapper).load(function(){
 			// Compute cuts
 			var imgHeight 	= $img.height(),
 				imgWidth	= $img.width(),
@@ -90,7 +91,7 @@ $.fn.borderImage = function(value){
 							bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, resolution, resolution);
 							// Store the slice in an image in order to reuse it
 							var el = document.createElement('img');
-							el.src = bicanvas.toDataURL();						
+							el.src = bicanvas.toDataURL();
 						} else {
 							// Could you explain me why we can't just use "document.createElement('biv:image')"?
 							var el = document.createElement('div');
@@ -114,19 +115,29 @@ $.fn.borderImage = function(value){
 					thisStyle = {
 						position: 'relative',
 						borderColor: 'transparent',
-						background: 'none'
+						background: 'none',
+						padding: 0
 					},
+					innerWrapper = document.createElement('div'),
 					reuse = true;
+					
+				// There is many case where "display: 'inline'" actually is a problem.
+				// TODO: Try to find exactly where
+				if($this.css('display') == 'inline')
+					thisStyle.display = 'inline-block'; 			
 					
 				// Fix various MSIE6 bugs
 				if($.browser.msie && parseInt($.browser.version) < 7){
 					thisStyle.borderColor = '#808180';
-					thisStyle.filter = 'chroma(color=#808180)';
-					if($this.css('display') == 'inline')
-						thisStyle.display = 'inline-block';
+					thisStyle.filter = 'chroma(color=#808180)';					
 				}
 				
-				$this.css(thisStyle);
+				innerWrapper.style.paddingTop = $this.css('paddingTop');
+				innerWrapper.style.paddingLeft = $this.css('paddingLeft');
+				innerWrapper.style.paddingBottom = $this.css('paddingBottom');
+				innerWrapper.style.paddingRight = $this.css('paddingRight');
+				innerWrapper.style.position = 'relative';
+				$this.css(thisStyle).wrapInner(innerWrapper);
 				
 				if(borderTop != $this.css('borderTopWidth')) {
 					borderTop = $this.css('borderTopWidth');
@@ -164,10 +175,10 @@ $.fn.borderImage = function(value){
 					
 					// Create the magical tiles
 					drawBorder({top:'-'+borderTop, left:'-'+borderLeft, height: borderTop, width: borderLeft}, 				slice0);
-					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop, zIndex: -100}, 					slice1);
+					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop}, 								slice1);
 					drawBorder({top:'-'+borderTop, right:'-'+borderRight, height: borderTop, width: borderRight}, 			slice2);									
 					drawBorder({top: 0, bottom:0, left:'-'+borderLeft, width: borderLeft, height: '100%'}, 					slice3);					
-					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%', zIndex: -100},			slice4);
+					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%'},						slice4);
 					drawBorder({top: 0, bottom:0, right:'-'+borderRight, width: borderRight, height: '100%'}, 				slice5);									
 					drawBorder({bottom:'-'+borderBottom, left:'-'+borderLeft, width: borderLeft, height: borderBottom},		slice6);
 					drawBorder({bottom:'-'+borderBottom, left: 0, width:'100%', height: borderBottom}, 						slice7);
