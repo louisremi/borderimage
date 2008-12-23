@@ -18,13 +18,13 @@ body {
 	margin: 0 0 40px;
 }
 
-#content {
+#content, #bi {
 	width: 620px;
 	padding: 0 5px;
 	border: 10px solid transparent;
 }
 
-#content h2.first {
+#content h2.first, #bi h2.first {
 	margin-top: 0;
 }
 
@@ -79,7 +79,7 @@ a:hover {
 	color: red;
 	text-decoration: underline;
 }
-#content li {
+#content li, #bi li {
 	line-height: 1.2em;
 	margin-top: 5px;
 }

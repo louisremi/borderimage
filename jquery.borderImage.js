@@ -8,6 +8,11 @@
  *
  */
 
+/* TODO:
+ * - Empty elements (img, canvas, ...) can't use borderImage without beeing wrapped first.
+ */
+
+
 // Snif browser capabilities.
 var cap;
 // WebKit 525+ (and probably earlier) and Gecko 1.9.1+ can handle borderImage properly.
@@ -48,7 +53,7 @@ $.fn.borderImage = function(value){
 	    for(var i = 0; i < argsLength && arguments[i].constructor == String; ++i){
 	    	var img = document.createElement('img');
 	      	img.src = arguments[i];
-			// If we don't clone the image, load event may not be fired in IE!
+			// If we don't clone the image, load event may not fire in IE
 	      	imageWrapper.appendChild(img.cloneNode(true));
 	    }
 	    imageWrapper.style.position = 'absolute';
@@ -137,6 +142,7 @@ $.fn.borderImage = function(value){
 				innerWrapper.style.paddingBottom = $this.css('paddingBottom');
 				innerWrapper.style.paddingRight = $this.css('paddingRight');
 				innerWrapper.style.position = 'relative';
+				innerWrapper.className = 'biWrapper'
 				$this.css(thisStyle).wrapInner(innerWrapper);
 				
 				if(borderTop != $this.css('borderTopWidth')) {
@@ -204,4 +210,23 @@ $.fn.borderImage = function(value){
 $.fn.borderImage.defaults = {
 	resolution: 20
 };
+
+/*
+ * Helper function to resize an element potentially decorated with an emulated border-image, using an animation.
+ */
+$.fn.biResize = function(newDimensions) {
+	return this.each(function(i, el){
+		var $el = $(el),
+			$biWrap = $el.find('.biWrapper');
+			// If the content is wrapped, it means the browser is emulating borderImage
+		    if($biWrap.length) {
+		        // transfer dimensions to the internal wrapper
+		        $biWrap.css({ width: $el.css('width'), height: $el.css('height') });
+		        $el.css({ width: 'auto', height: 'auto' });
+		        // Resize the internal wrapper instead
+		        $biWrap.animate(newDimensions);
+		    // If the native implementation is used, you can resize the element itself
+		    } else $el.animate(newDimensions);
+	});
+}
 })(jQuery);

@@ -49,7 +49,7 @@
 	    $(document).ready(function(){
 			// Page layout
 			$('#sidebar').borderImage('url("media/gradient.png") 10 10 0', 100);			
-			$('#content').borderImage('url("media/shadow.png") 5');
+			$('#content, #bi').borderImage('url("media/shadow.png") 5');
 			
 			// Interactive demonstration
 			$('#innaccessible, #demonstration').css('display', 'inline');
@@ -92,6 +92,10 @@
 			}).blur(function(){
 				$(this).removeClass('bi2')
 			});
+			
+			setTimeout(function(){
+				$('#sidebar').biResize({height: '800px'});
+			}, 2000)
 		});
 	</script>
 </head>
@@ -99,7 +103,7 @@
 <div id="header">
 	<h1>Meet the ninja living in your browser</h1>
 	<p><a href="http://www.w3.org/Style/CSS/current-work#CSS3">CSS3 draft</a> introduced, amongst many properties
-	that will change Web designer's life, one that could be terribly powerfull once you get familiar with it: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
+	that will change Web designer's life, one that could be terribly powerful once you get familiar with it: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
 	Discover what it can do for you, today.</p>
 	
 </div>
@@ -108,7 +112,7 @@
 	<div id="sidebar">
 		<p>
 			In the dark ages of table layouts, Web pioneers used to build their
-			whole pages using heavy, unmaintainable, innaccessible
+			whole pages using heavy, unmaintainable, inaccessible
 			&lt;table&gt;s.
 		</p>
 		<p>
@@ -118,7 +122,7 @@
 			and countless, meaningless &lt;div&gt;s to please our eyes.
 		</p>
 		<p>
-			Introducing CSS3 and the border-image property, your personnal design ninja.
+			Introducing CSS3 and the border-image property, your personal design ninja.
 			It is now possible to decorate any container, element of a page
 			independently of it's position and dimensions in a flash.
 			Just design and describe how you would have sliced;
@@ -141,8 +145,8 @@
 	</p>
 	<span class="center"><img src="media/clock.png" alt="clock"></span>
 	<p>
-		There is probably no need to remember you that by using this syntax, if you ommit to specify the border-left width,
-		the browser uses the border-right value; if you ommit the border-bottom value it uses the border-top value
+		There is probably no need to remember you that by using this syntax, if you omit to specify the border-left width,
+		the browser uses the border-right value; if you omit the border-bottom value it uses the border-top value
 		and if you specify only one value, it will be used for your four borders.
 	</p>
 <pre class="float" style="margin-top: 0;"><code>#element {
@@ -184,7 +188,7 @@
 		<li>
 			<pre><code>round round</code></pre>
 			The last part is the <i>stretch value</i>. It describes how the slices for the sides and the middle part are scaled and tiled.
-			Few things to rememenber before trying to understand what it does:
+			Few things to remember before trying to understand what it does:
 			<ul>
 				<li>Specifying only one value is the same as specifying twice the same one.</li>
 				<li>There is three possible values: "<i>stretch</i>", "<i>repeat</i>" and "<i>round</i>".</li>
@@ -211,7 +215,7 @@
 	</p>
 	<h2>See what it can do</h2>
 	<p>
-		You have the ressources to be creative, imaginative and you certainly have an opinion about beauty. 
+		You have the resources to be creative, imaginative and you certainly have an opinion about beauty. 
 		The border-image ninja doesn't know anything about that, it is just really good at martial techniques, 
 		it is only a tool allowing you to express yourself. Here is what it can do when asked for some purely technical demonstrations:
 	</p>
@@ -272,23 +276,175 @@
 	<h2>Start using it today</h2>
 	<p>
 		Currently this property is only implemented in the upcoming Firefox3.1 and recent releases of Safari and Chrome.
-		However, most current browsers implement features that are able to slice images:
+		However, you may have noticed that previous demonstrations where displayed currently in your browser, 
+		even though it wasn't featured in this list. 
+		Indeed, most current browsers implement features that are able to slice images.
 	</p>
 	<ul>
 		<li>The <a href="http://www.whatwg.org/specs/web-apps/current-work/#canvas">canvas element</a> and its <a href="http://www.whatwg.org/specs/web-apps/current-work/#dom-context-2d-drawimage">drawImage</a> method,
 			available in firefox2+ (and even earlier) and recent releases of opera browser.
 		</li>
 		<li>
-			<a href="http://msdn.microsoft.com/en-us/library/bb263898(VS.85).aspx">VML</a> and its <a href="http://msdn.microsoft.com/en-us/library/bb229512(VS.85).aspx">image element</a> 
+			<a href="http://msdn.microsoft.com/en-us/library/bb263898(VS.85).aspx">VML</a>,
+			its <a href="http://msdn.microsoft.com/en-us/library/bb229512(VS.85).aspx">image element</a> 
+			and "<i>croptop</i>", "<i>cropright</i>", "<i>cropbottom</i>", "<i>cropleft</i>" properties
 			available in ie6+ (and even earlier).
 		</li>
 	</ul>
 	<p>
-		All we have to do once the image is sliced is to use the slices to create the tile that suit our needs.
-		Although it is theoritically possible to implement both the "repeat" and "round" value, it is not reasonnable
-		to do it for performance reasons.<br/>
-		With some optimisation, "stretch" can be implemented, though.
+		Those features could only be compared to a <a href="http://en.wikipedia.org/wiki/Katana">katana</a>, 
+		as we still have to create the ninja to use it:
+		Basically, we have to create nine slices from the image one by one the, and then create a tile to be inserted
+		in the background of our element.
 	</p>
+	<span class="center"><img src="media/katanas.png" alt="four katanas slicing an image"></span>
+	<p>
+		Bellow, you will find explanations about the script that create the ninja who sliced the demonstrations
+		throughout this page: <a href="#bi">jquery.borderImage.js</a>.
+	</p>
+	<h2>Limits of border-image</h2>
+	<p>
+		This property is not implemented in all browsers. 
+		Although it is possible to emulate it, one can neither expect same level of quality, performance nor
+		conformance to the specification. 
+		Moreover, it cannot be done without alterations to the DOM of your Web page:		
+	</p>
+	<ul>
+		<li>Nine &lt;img&gt;s that will display the slices have to be inserted inside the element.</li>
+		<li>The content of the element has to be wrapped and positioned to appear on top of the background slices.</li>
+		<li>The element itself has to be positioned (in relative or absolute) for the slices to scale seamlessly with the element.</li>
+		<li>Elements displayed <i>inline</i> have to be switched to <i>inline-block</i> for the slices to be correctly tiled inside the element.</li>
+	</ul>
+	<p>
+		Despite being theoretically possible to implement both the "repeat" and "round" value, it is not reasonable
+	    to do it for performance reasons as it would involve creation of countless background &lt;img&gt;s, and it would
+		also be impossible to make them scale dynamically with the element.
+	    With some optimization, "stretch" can be implemented, though.
+	</p>
+	<p>
+		All those limitations shouldn't prevent you to actually use it. The border-image ninja is still very helpful in many cases of modern Web design.
+		However, if your are concerned by obvious limits of the implementation in some older browsers, you should consider this fact:
+		Nowadays, there is too many browsers available, too many operating system being used (each one with its own set of fonts), 
+		resulting in so many configurations that trying to create a cross-browser pixel-perfect Web design appears to be a dead end.
+		You should rather consider building Web design using simple tools such as <i>border-image</i> that would degrade gracefully
+		in older browsers but would keep your markup clear everywhere. 
+		Thus, helping you to keep a clear separation between content and layout which will even ease the maintenance of your code.
+	</p>
+</div>
+<div id="bi">
+	<h2 class="first">A first implementation: jquery.borderImage.js</h2>
+	<p>
+		This page uses a script that is a partial implementation of border-image, 
+		packaged as a plugin for the popular <a href="http://www.jquery.com">jQuery</a> library.
+		Dependence upon jQuery features has been kept to minimal inorder to ease reuse of the script with
+		other popular libraries. Following is the kind of JavaScript code to write instead of using the css property:
+	</p>
+<pre><code>$('#element').borderImage('url("border.png") 30% 35% 40% 30%');</code></pre>
+	<p>
+		Depending on browser features, this script will either use native implementation of the css property when available,
+		or try to use canvas or vml instead, depending of browser's features. 
+		It is only a partial implementation of the property since only the <i>stretch</i> value is available, for the reasons explained above.
+		It works better on <i>block</i> or <i>inline-block</i> displayed elements.
+		Visual result when used on inline elements is not guaranteed to be cross-browser.
+	</p>
+	<h3 id="getCode">Get the code</h3>
+	<p>
+		The code is dual licensed under MIT and GPLv3 licenses and is available on github.
+	</p>
+	<p>
+		Everyone is encouraged to port this piece of code to his/her favorite JavaScript library 
+		and to encourage other people to use it : )
+		I will be happy to help you on that purpose: <a href="mailto:public@lrbabe.com">public@lrbabe.com</a>
+	</p>
+	<h3>Browsers compatibility</h3>
+	<p>
+		jquery.borderImage.js has been tested on following browsers:
+	<ul>
+		<li>Firefox 2.*, Firefox 3, Firefox 3.1</li>
+		<li>Safari 3.*</li>
+		<li>Chrome 1.0</li>
+		<li>Opera 9.*, Opera 10</li>
+		<li>IE7</li>
+	</ul>
+	<p>
+		There is still a bug on IE6 that prevent to use it on large elements (more than 100px wide or tall)
+		and there is some graphical glitches when using transparent/semi-transparent png images.
+		IE8, still in development, suffers from a major regression: it is no more possible to dynamically
+		create vml elements (see <a href="https://connect.microsoft.com/IE/feedback/ViewFeedback.aspx?FeedbackID=333905">related bug on Microsoft Connect</a>).
+		Hopefully this will be fixed in the final version. In the mean time you can still use the IE7 meta tag:
+	</p>
+<pre><code>&lt;meta http-equiv="X-UA-Compatible" content="IE=7" /&gt;</code></pre>
+	<h3>Resizing an element dynamically</h3>
+	<p>
+		When dynamically resizing an element, every slices but the edges are supposed to be scaled.
+		However, when using an animation (such as jQuery's animate function), border's slices temporarily disappears when resizing directly the element if border-image is emulated.
+		You should rather resize the content of the element or use the provided helper function:
+	</p>
+<pre><code>$('#element').biResize({height: '200px', width: '300px'});</code></pre>
+	<p>
+		Note that it is not possible to dynamically resize borders' widths.
+	</p>
+	<!--<h3>Using stretching background</h3>
+	<p>
+		If you are using an image that will be obviously stretched with the border-image property 
+		(the gradient on the sidebar of this page is obviously stretched, 
+		the shadow on this on the content is stretched as well, but repeating it would produce the same result),
+		this image may be strecthed by level instead of gradually, particulary .
+	</p>-->
+	<h3>Creating multi-state buttons</h3>
+	<p>
+		To produce cross-browser multi-state buttons, you should use the following kind of code:
+	</p>
+<pre><code>&lt;script&gt;
+    $('.button a').borderImage(
+        'url("media/button0.png") 0 5',
+        'media/button1.png',
+        'media/button2.png'
+    ).mouseover(function(){
+        $(this).addClass('bi1')
+    }).mouseout(function(){
+        $(this).removeClass('bi1')
+    }).focus(function(){
+        $(this).addClass('bi2')
+    }).blur(function(){
+        $(this).removeClass('bi2')
+    });
+&lt;/script&gt;
+
+&lt;style&gt;
+    .button a {
+        border: solid transparent;
+        border-width: 0 8px;
+    }		
+    .button a:focus {
+        outline: none;
+    }				
+    .button a .biSlice {
+        z-index: -1;
+    }
+    .button a .image0 {
+        z-index: 0;
+    }
+    .button a {
+        -moz-border-image: url("media/button0.png") 0 5;
+        -webkit-border-image: url("media/button0.png") 0 5;
+    }
+    .button a.bi1 .image1 {
+        z-index: 0;
+    }
+    .button a.bi1 {
+        -moz-border-image: url("media/button1.png") 0 5;
+        -webkit-border-image: url("media/butto1.png") 0 5;
+    }	
+    .button a.bi2 .image2 {
+        z-index: 0;
+    }
+    .button a.bi2 {
+        -moz-border-image: url("media/button2.png") 0 5;
+        -webkit-border-image: url("media/button2.png") 0 5;
+    }
+&lt;style&gt;
+</code></pre>
 </div>
 </body>
 </html>
