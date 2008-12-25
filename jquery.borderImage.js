@@ -214,7 +214,7 @@ $.fn.borderImage.defaults = {
 /*
  * Helper function to resize an element potentially decorated with an emulated border-image, using an animation.
  */
-$.fn.biResize = function(newDimensions) {
+$.fn.biResize = function(newDimensions, options) {
 	return this.each(function(i, el){
 		var $el = $(el),
 			$biWrap = $el.find('.biWrapper');
@@ -224,9 +224,9 @@ $.fn.biResize = function(newDimensions) {
 		        $biWrap.css({ width: $el.css('width'), height: $el.css('height') });
 		        $el.css({ width: 'auto', height: 'auto' });
 		        // Resize the internal wrapper instead
-		        $biWrap.animate(newDimensions);
+		        $biWrap.animate(newDimensions, options);
 		    // If the native implementation is used, you can resize the element itself
-		    } else $el.animate(newDimensions);
+		    } else $el.animate(newDimensions, options);
 	});
 }
 })(jQuery);

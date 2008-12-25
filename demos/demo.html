@@ -92,10 +92,6 @@
 			}).blur(function(){
 				$(this).removeClass('bi2')
 			});
-			
-			setTimeout(function(){
-				$('#sidebar').biResize({height: '800px'});
-			}, 2000)
 		});
 	</script>
 </head>
@@ -349,7 +345,7 @@
 	</p>
 	<h3 id="getCode">Get the code</h3>
 	<p>
-		The code is dual licensed under MIT and GPLv3 licenses and is available on github.
+		The code is dual licensed under MIT and GPLv3 licenses and is available on <a href="http://github.com/lrbabe/borderimage/tree/master">github</a> for <a href="http://github.com/lrbabe/borderimage/raw/master/jquery.borderImage.js">download</a>.
 	</p>
 	<p>
 		Everyone is encouraged to port this piece of code to his/her favorite JavaScript library 
@@ -380,7 +376,7 @@
 		However, when using an animation (such as jQuery's animate function), border's slices temporarily disappears when resizing directly the element if border-image is emulated.
 		You should rather resize the content of the element or use the provided helper function:
 	</p>
-<pre><code>$('#element').biResize({height: '200px', width: '300px'});</code></pre>
+<pre><code>$('#element').biResize({height: '200px', width: '300px'}, options);</code></pre>
 	<p>
 		Note that it is not possible to dynamically resize borders' widths.
 	</p>
@@ -393,13 +389,56 @@
 	</p>-->
 	<h3>Creating multi-state buttons</h3>
 	<p>
-		To produce cross-browser multi-state buttons, you should use the following kind of code:
+		Producing multi-state button requires a little more thinking.
+		Browsers featuring a native implementation of border-image could be asked to slice a different
+		image for each state of the button (using <i>:hover</i>, <i>:click</i> and <i>:focus</i> pseudo-classes).
+	</p>
+<pre><code>    .button a {
+        -moz-border-image: url("media/button0.png") 0 5;
+        -webkit-border-image: url("media/button0.png") 0 5;
+    }
+    .button a:hover {
+        -moz-border-image: url("media/button1.png") 0 5;
+        -webkit-border-image: url("media/butto1.png") 0 5;
+    }	
+    .button a:focus {
+        -moz-border-image: url("media/button2.png") 0 5;
+        -webkit-border-image: url("media/button2.png") 0 5;
+    }</code></pre>
+	<p>
+		But in browsers emulating border-image, performance is an issue for this kind of operations,
+		buttons would flicker each time their state change if you use this kind of code:
+	</p>
+<pre><code>$('.button a').borderImage('url("media/button0.png") 0 5')
+    .mouseover('url("media/button1.png") 0 5')
+    .focus('url("media/button2.png") 0 5');
+</code></pre>
+	<p>
+		It is more efficient to slice the different images for each state once,
+		and display only slices corresponding to the current state of the button.
+		jquery.borderImage.js provides a way to slice, in the same way, different images for a single element:
+	</p>
+<pre><code>$('.button a').borderImage(
+    'url("media/button0.png") 0 5,
+    'media/button1.png',
+    'media/button2.png'
+);</code></pre>
+	<span class="center"><i>Slices from each image will be </i>tagged<i> with a different class</i> (image0, image1, ...)</span>
+	<p>
+		But borderImage isn't aware what image correspond to what event, as you could even define custom event to change the state of a button.
+		You have to use a hybrid JavaScript/css solution for that purpose.
+		Note that browsers with native implementation have to be handled separatly in css when using the <i>alternative image syntax</i>. 
 	</p>
 <pre><code>&lt;script&gt;
     $('.button a').borderImage(
+		// Slices from this image will be tagged with class 'image0'
         'url("media/button0.png") 0 5',
-        'media/button1.png',
-        'media/button2.png'
+        // You can specify as much alternative image as you wan't.
+        // Just add any number of image's URL as String parameter.
+        'media/button1.png', // Tagged 'image1'
+        'media/button2.png' // Tagged 'image2'
+    // The most performant solution is to switch class of the button on an event,
+    // and then let css switch display of the slices.
     ).mouseover(function(){
         $(this).addClass('bi1')
     }).mouseout(function(){
@@ -418,24 +457,29 @@
     }		
     .button a:focus {
         outline: none;
-    }				
+    }
+    /* All slices are hidden under the button by default */
     .button a .biSlice {
         z-index: -1;
     }
+    /* Only slices from the first image are visible */
     .button a .image0 {
         z-index: 0;
     }
+    /* browsers using native implementation are handled with css */ 
     .button a {
         -moz-border-image: url("media/button0.png") 0 5;
         -webkit-border-image: url("media/button0.png") 0 5;
     }
+    /* When class of a button is switched, the alternative images are made visible */
     .button a.bi1 .image1 {
-        z-index: 0;
+        z-index:e 0;
     }
+    /* Same effect but for browsers using native implementation */
     .button a.bi1 {
         -moz-border-image: url("media/button1.png") 0 5;
         -webkit-border-image: url("media/butto1.png") 0 5;
-    }	
+    }
     .button a.bi2 .image2 {
         z-index: 0;
     }
