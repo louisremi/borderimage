@@ -1,6 +1,6 @@
 (function($){
 /*
- * jquery.borderImage - cross-browser implementation of CSS3's borderImage property
+ * jquery.borderImage - partial cross-browser implementation of CSS3's borderImage property
  *
  * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -12,37 +12,34 @@
  * - Empty elements (img, canvas, ...) can't use borderImage without beeing wrapped first.
  */
 
-
-// Snif browser capabilities.
-var cap;
-// WebKit 525+ (and probably earlier) and Gecko 1.9.1+ can handle borderImage properly.
-// We could be smarter and avoid using evil browser sniffing to detect if borderImage is implemented 
-// but it would involve a lot of processing, as safari 3.1 and chrome 0.4 still don't answer to .css('-webkitBorderImage')
-// Anyway we need to know which vendor prefix to use.
-if($.browser.mozilla && /^(1\.9\.[^0]|[^01])/.test($.browser.version))
-	cap = '-moz';
-else if($.browser.safari && parseInt($.browser.version) >= 525)
-	cap = '-webkit';
-else if(document.createElement('canvas').getContext) {
-	cap = 'canvas';
-	// Create a global canvas that will be used to draw the slices.
-	bicanvas = document.createElement('canvas');
-} else {
-	cap = 'vml';
-	if (!document.namespaces['biv']) {
-		document.namespaces.add('biv', 'urn:schemas-microsoft-com:vml', "#default#VML");
-		document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
-	}
-}
-	
 $.fn.borderImage = function(value){
-	// Use browsers native implemantation when available.
-	if(/^-/.test(cap))
-		// For single borderImage only
-		return (arguments[1] && arguments[1].constructor == String)? $(this) : $(this).css(cap+'BorderImage', value).css('backgroundColor', 'transparent');
+	// Test border-image and canvas support on first use
+	if(!$.fn.borderImage.initialized) {
+		if(document.defaultView && document.defaultView.getComputedStyle) {
+			var s = document.defaultView.getComputedStyle(document.body, '');
+			if(typeof(document.body.style['-webkitBorderImage']) == 'string') {
+				$.browser.support.borderImage = true;
+				$.fn.borderImage.prefix = '-webkit';
+			} else if(s.getPropertyValue('-moz-border-image') != '') {
+				$.browser.support.borderImage = true;
+				$.fn.borderImage.prefix = '-moz';
+			}
+		}
+		if(!$.browser.support.borderImage && document.createElement('canvas').getContext) {
+			$.browser.support.canvas = true;
+			// Create a global canvas that will be used to draw the slices.
+			bicanvas = document.createElement('canvas');
+		}
+		$.fn.borderImage.initialized = true;
+	}
 	
-	var result;
-  	if(result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?\s*(\d*)(%)?\s*(\d*)(%)?\s*(\d*)(%)?/.exec(value)) {    
+	// Use browsers native implemantation when available.
+	if($.browser.support.borderImage)
+		// For single borderImage only
+		return (arguments[1] && arguments[1].constructor == String)? $(this) : $(this).css($.fn.borderImage.prefix+'BorderImage', value).css('backgroundColor', 'transparent');
+	
+	var result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?\s*(\d*)(%)?\s*(\d*)(%)?\s*(\d*)(%)?/.exec(value);
+  	if(result && ($.browser.support.canvas || $.browser.support.vml)) {    
         
 		arguments[0] = result[1];
 	    var _this = this,
@@ -88,9 +85,9 @@ $.fn.borderImage = function(value){
 				var slice = document.createDocumentFragment();
 				// Don't waste time drawing slice with null dimension
 				if(sw > 0 && sh > 0) {
-					if(cap == 'canvas') bicanvas.setAttribute('height', resolution+'px');				
+					if($.browser.support.canvas) bicanvas.setAttribute('height', resolution+'px');				
 					for(var i = 0; i < image.length; ++i) {
-						if(cap == 'canvas') {
+						if($.browser.support.canvas) {
 							// Clear the global canvas and use it to draw a new slice
 							bicanvas.setAttribute('width', resolution+'px');
 							bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, resolution, resolution);
@@ -131,7 +128,7 @@ $.fn.borderImage = function(value){
 				if($this.css('display') == 'inline')
 					thisStyle.display = 'inline-block'; 			
 					
-				// Fix various MSIE6 bugs
+				// Workaround MSIE6 transparent border bug
 				if($.browser.msie && parseInt($.browser.version) < 7){
 					thisStyle.borderColor = '#808180';
 					thisStyle.filter = 'chroma(color=#808180)';					
@@ -201,11 +198,20 @@ $.fn.borderImage = function(value){
 					};									
 			});
 		});
-		// Could you explain me why we need that to have all the slices actually drawn...
-		if(cap != 'canvas') $('body')[0].appendChild(document.createElement('biv:image'));
+		// Is there an explanation why we need this line to have all the slices actually drawn?
+		if($.browser.support.vml) $('body')[0].appendChild(document.createElement('biv:image'));
 	}
 	return $(this);	
 };
+
+// Test vml support as early as possible.
+if(!$.browser.support) $.browser.support = {};		
+if (document.namespaces && !document.namespaces['biv']) {
+	document.namespaces.add('biv', 'urn:schemas-microsoft-com:vml', "#default#VML");
+	document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
+	$.browser.support.vml = true;
+	$.fn.borderImage.initialized = true;
+ }
 
 $.fn.borderImage.defaults = {
 	resolution: 20
