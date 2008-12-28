@@ -1,7 +1,7 @@
 <!DOCTYPE html>	
 <html>
 <head>
-	<title>borderImage demonstration page</title>
+	<title>border-image demonstration page</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=7" />
 	<script type="text/javascript" src="logic/jquery-1.3b1.js"></script>
@@ -97,10 +97,10 @@
 </head>
 <body>
 <div id="header">
-	<h1>Meet the ninja living in your browser</h1>
+	<h1>Meet a ninja living in browsers</h1>
 	<p><a href="http://www.w3.org/Style/CSS/current-work#CSS3">CSS3 draft</a> introduced, amongst many properties
-	that will change Web designer's life, one that could be terribly powerful once you get familiar with it: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
-	Discover what it can do for you, today.</p>
+	that will change Web designer's life, one that could be terribly powerful: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
+	Discover what it can do, today.</p>
 	
 </div>
 <div class="float">
@@ -129,7 +129,7 @@
 	
 <div id="content">
 	<h2 class="first">Learn its code</h2>
-	<p>Let's start with a simple example to see how you can invoke and give instructions to the border-image ninja:</p>
+	<p>Let's start with a simple example to see how the border-image ninja can be invoked and given instructions:</p>
 <pre><code>#element {
     border-width: 10px 15px 12px 13px;
     border-image: url("border.png") 30% 35% 40% 30% round round;
@@ -159,7 +159,7 @@
     border-width: 10px 15px;
 }</code></pre>
 	<p>
-		The same principes apply to the second part of the next property.
+		The same principles will apply to the second part of the next property.
 	</p>
 	<p>
 		The second property is the one which will actually invoke our zealous ninja.
@@ -280,13 +280,13 @@
 	</p>
 	<ul>
 		<li>The <a href="http://www.whatwg.org/specs/web-apps/current-work/#canvas">canvas element</a> and its <a href="http://www.whatwg.org/specs/web-apps/current-work/#dom-context-2d-drawimage">drawImage</a> method,
-			available in firefox2+ (and even earlier) and recent releases of opera browser.
+			available in firefox2+ and recent releases of opera browser.
 		</li>
 		<li>
 			<a href="http://msdn.microsoft.com/en-us/library/bb263898(VS.85).aspx">VML</a>,
 			its <a href="http://msdn.microsoft.com/en-us/library/bb229512(VS.85).aspx">image element</a> 
-			and "<i>croptop</i>", "<i>cropright</i>", "<i>cropbottom</i>", "<i>cropleft</i>" properties
-			available in ie6+ (and even earlier).
+			and the "<i>croptop</i>", "<i>cropright</i>", "<i>cropbottom</i>", "<i>cropleft</i>" properties
+			available in ie6+.
 		</li>
 	</ul>
 	<p>
@@ -313,7 +313,7 @@
 	</ul>
 	<p>
 		Only the <i>stretch</i> keyword can be implemented.
-		Supporting both <i>repeat</i> and <i>round</i> it would involve creation of countless background &lt;img&gt;s
+		Supporting both <i>repeat</i> and <i>round</i> would involve creation of countless background &lt;img&gt;s
 		(which is not reasonable for performance reasons),
 		and it would anyway be impossible to make them scale dynamically with the element.
 	</p>
@@ -321,7 +321,7 @@
 	<p>
 		Nowadays, there is too many browsers available, too many operating system being used (each one with its own set of fonts), 
 		resulting in so many configurations that trying to create a cross-browser pixel-perfect Web design appears to be a dead end.
-		You should rather consider building Web design using simple tools such as <i>border-image</i> that can degrade gracefully
+		You should rather consider building Web design using simple tools such as <i>border-image</i> that degrade gracefully
 		in older browsers but always keep a clear separation between content and presentation, thus easing maintenance of your code.
 	</p>
 </div>
@@ -365,15 +365,15 @@
 		and there is some graphical glitches when using transparent/semi-transparent png images.
 		IE8, still in development, suffers from a major regression: it is no more possible to dynamically
 		create vml elements (see <a href="https://connect.microsoft.com/IE/feedback/ViewFeedback.aspx?FeedbackID=333905">related bug on Microsoft Connect</a>).
-		Hopefully this will be fixed in the final version. In the mean time you can still use the IE7 meta tag:
+		Hopefully this will be fixed in the final version. In the mean time, the IE7 meta tag can be used:
 	</p>
 <pre><code>&lt;meta http-equiv="X-UA-Compatible" content="IE=7" /&gt;</code></pre>
 	<h3>Resizing an element dynamically</h3>
 	<p>
 		When dynamically resizing an element, every slices but the edges are supposed to be scaled seamlessly.
 		However, when using an animation (such as jQuery's <i>animate</i> function), 
-		border's slices temporarily disappear when resizing directly the element if border-image is emulated.
-		You should rather resize the content of the element or use the provided helper function:
+		border slices temporarily disappear when resizing directly the element if border-image is emulated.
+		One should rather resize the content of the element or use the provided helper function:
 	</p>
 <pre><code>$('#element').biResize({height: '200px', width: '300px'}, options);</code></pre>
 	<p>
@@ -424,14 +424,14 @@
 	<span class="center"><i>Slices from each image will be </i>tagged<i> with a different class</i> (image0, image1, ...)</span>
 	<p>
 		But borderImage isn't aware what image correspond to what event.
-		You have to use a hybrid JavaScript/css solution for that purpose.
+		A hybrid JavaScript/css solution has to be used for that purpose.
 		Note that browsers with native implementation have to be handled separatly in css when using the <i>alternative image syntax</i>. 
 	</p>
 <pre><code>&lt;script&gt;
     $('.button a').borderImage(
 		// Slices from this image will be tagged with class 'image0'
         'url("media/button0.png") 0 5',
-        // You can specify as much alternative image as you wan't.
+        // Then specify as much alternative image as needed.
         // Just add any number of image's URL as String parameter.
         'media/button1.png', // Tagged 'image1'
         'media/button2.png' // Tagged 'image2'
