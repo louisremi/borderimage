@@ -15,7 +15,7 @@ body {
 	text-decoration: underline;
 }
 #header p {	
-	margin: 0 0 40px;
+	margin: 0 0 100px;
 }
 
 #content, #bi {
@@ -35,13 +35,13 @@ body {
 #logo {
 	width: 280px;
 	position: relative;
-	bottom: 160px;
+	bottom: 220px;
 }
 
 #sidebar {
 	width: 260px;
 	position: relative;
-	bottom: 140px;
+	bottom: 200px;
 	border: 10px solid transparent;
 }
 
