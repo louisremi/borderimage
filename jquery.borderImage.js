@@ -126,7 +126,19 @@ $.fn.borderImage = function(value){
 				// There is many case where "display: 'inline'" actually is a problem.
 				// TODO: Try to find exactly where
 				if($this.css('display') == 'inline')
-					thisStyle.display = 'inline-block'; 			
+					thisStyle.display = 'inline-block';
+				
+				/* When the element is absolute positionned but has a relative
+				 * a relative postionned ancestor, don't change its position.
+				 */				
+				if($this.css('position') == 'absolute') {
+					do {
+						if ($.curCSS(el, 'position') == 'relative') {
+							thisStyle.position = 'absolute';
+							break;
+						}
+					} while (el = el.parentNode);
+				}			
 					
 				// Workaround MSIE6 transparent border bug
 				if($.browser.msie && parseInt($.browser.version) < 7){

@@ -1513,8 +1513,8 @@
        id="rect2438"
        width="75.734802"
        height="69.423569"
-       x="541.50385"
-       y="212.96809"
+       x="540.05347"
+       y="216.64984"
        rx="7.3214288"
        ry="7.7793403" />
     <rect
@@ -2276,6 +2276,35 @@
        id="rect2650"
        sodipodi:nodetypes="ccccccc"
        inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/roundedCorner.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2651"
+       width="23"
+       height="29"
+       x="506.96613"
+       y="239.89084"
+       rx="10.264247"
+       ry="10.353501" />
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 509.64219,243.06971 L 527.38148,243.16017 C 523.81131,240.08122 520.46428,239.81313 520.46428,239.81313 L 515.89,239.87234 C 515.89,239.87234 511.76198,240.64208 509.64219,243.06971 z"
+       id="path3423"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/lrbabe/Bureau/tab.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:#000000;fill-opacity:0;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3425"
+       width="24"
+       height="20"
+       x="506.40027"
+       y="239.39084"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/lrbabe/Bureau/tab.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
   </g>
