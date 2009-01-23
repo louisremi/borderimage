@@ -2,7 +2,7 @@
 /*
  * jquery.borderImage - partial cross-browser implementation of CSS3's borderImage property
  *
- * Copyright (c) 2008 lrbabe (/ɛlɛʁbab/ lrbabe.com)
+ * Copyright (c) 2009 lrbabe (/ɛlɛʁbab/ lrbabe.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -20,7 +20,7 @@ $.fn.borderImage = function(value){
 			if(typeof(document.body.style['-webkitBorderImage']) == 'string') {
 				$.browser.support.borderImage = true;
 				$.fn.borderImage.prefix = '-webkit';
-			} else if(s.getPropertyValue('-moz-border-image') != '') {
+			} else if(s.getPropertyValue('-moz-border-image') !== '') {
 				$.browser.support.borderImage = true;
 				$.fn.borderImage.prefix = '-moz';
 			}
@@ -34,9 +34,10 @@ $.fn.borderImage = function(value){
 	}
 	
 	// Use browsers native implemantation when available.
-	if($.browser.support.borderImage)
+	if($.browser.support.borderImage) {
 		// For single borderImage only
 		return (arguments[1] && arguments[1].constructor == String)? $(this) : $(this).css($.fn.borderImage.prefix+'BorderImage', value).css('backgroundColor', 'transparent');
+	}
 	
 	var result = /url\(\s*"(.*?)"\s*\)\s*(\d+)(%)?\s*(\d*)(%)?\s*(\d*)(%)?\s*(\d*)(%)?/.exec(value);
   	if(result && ($.browser.support.canvas || $.browser.support.vml)) {    
@@ -85,7 +86,9 @@ $.fn.borderImage = function(value){
 				var slice = document.createDocumentFragment();
 				// Don't waste time drawing slice with null dimension
 				if(sw > 0 && sh > 0) {
-					if($.browser.support.canvas) bicanvas.setAttribute('height', resolution+'px');				
+					if($.browser.support.canvas) {
+						bicanvas.setAttribute('height', resolution+'px');
+					}			
 					for(var i = 0; i < image.length; ++i) {
 						if($.browser.support.canvas) {
 							// Clear the global canvas and use it to draw a new slice
@@ -98,8 +101,7 @@ $.fn.borderImage = function(value){
 							// Could you explain me why we can't just use "document.createElement('biv:image')"?
 							var el = document.createElement('div');
 							el.insertAdjacentHTML('BeforeEnd', 
-								'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />'
-							);
+								'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />' );
 							el = el.firstChild;
 						}
 						el.style.width = el.style.height = '100%';
@@ -125,8 +127,9 @@ $.fn.borderImage = function(value){
 					
 				// There is many case where "display: 'inline'" actually is a problem.
 				// TODO: Try to find exactly where
-				if($this.css('display') == 'inline')
+				if($this.css('display') == 'inline') {
 					thisStyle.display = 'inline-block';
+				}
 				
 				/* When the element is absolute positionned but has a relative
 				 * a relative postionned ancestor, don't change its position.
@@ -151,7 +154,7 @@ $.fn.borderImage = function(value){
 				innerWrapper.style.paddingBottom = $this.css('paddingBottom');
 				innerWrapper.style.paddingRight = $this.css('paddingRight');
 				innerWrapper.style.position = 'relative';
-				innerWrapper.className = 'biWrapper'
+				innerWrapper.className = 'biWrapper';
 				$this.css(thisStyle).wrapInner(innerWrapper);
 				
 				if(borderTop != $this.css('borderTopWidth')) {
@@ -171,22 +174,23 @@ $.fn.borderImage = function(value){
 					reuse = false;
 				}
 				
+				function drawBorder(style, slice) {
+					// Don't waste time drawing borders with null dimension
+					if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
+						var el = document.createElement('div');
+						for(var i in style) {
+							el.style[i] = style[i];
+						}
+						el.style.position = 'absolute';
+						el.style.textAlign = 'left';
+						el.appendChild(slice.cloneNode(true));
+						fragment.appendChild(el);
+					}						
+				}
+				
 				// Reuse previous fragment if borderWidths are the same.
 				if(!reuse) {
-					var fragment = document.createDocumentFragment();
-					
-					function drawBorder(style, slice) {
-						// Don't waste time drawing borders with null dimension
-						if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
-							var el = document.createElement('div');
-							for(var i in style)
-								el.style[i] = style[i];
-							el.style.position = 'absolute';
-							el.style.textAlign = 'left';
-							el.appendChild(slice.cloneNode(true));
-							fragment.appendChild(el);
-						}						
-					}
+					var fragment = document.createDocumentFragment();					
 					
 					// Create the magical tiles
 					drawBorder({top:'-'+borderTop, left:'-'+borderLeft, height: borderTop, width: borderLeft}, 				slice0);
@@ -204,20 +208,25 @@ $.fn.borderImage = function(value){
 				$this.prepend(prevFragment.cloneNode(true));
 				
 				// height: 100% doesn't work in IE6
-				if($.browser.msie && parseInt($.browser.version) < 7)
+				if($.browser.msie && parseInt($.browser.version) < 7) {
 					el.onpropertychange = function(){
-						$this.find('div:eq(3), div:eq(4), div:eq(5)').css('height', $this.innerHeight())
-					};									
+						$this.find('div:eq(3), div:eq(4), div:eq(5)').css('height', $this.innerHeight());
+					};
+				}								
 			});
 		});
 		// Is there an explanation why we need this line to have all the slices actually drawn?
-		if($.browser.support.vml) $('body')[0].appendChild(document.createElement('biv:image'));
+		if($.browser.support.vml) {
+			$('body')[0].appendChild(document.createElement('biv:image'));
+		}
 	}
 	return $(this);	
 };
 
 // Test vml support as early as possible.
-if(!$.browser.support) $.browser.support = {};		
+if(!$.browser.support) {
+	$.browser.support = {};
+}		
 if (document.namespaces && !document.namespaces['biv']) {
 	document.namespaces.add('biv', 'urn:schemas-microsoft-com:vml', "#default#VML");
 	document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
@@ -244,7 +253,9 @@ $.fn.biResize = function(newDimensions, options) {
 		        // Resize the internal wrapper instead
 		        $biWrap.animate(newDimensions, options);
 		    // If the native implementation is used, you can resize the element itself
-		    } else $el.animate(newDimensions, options);
+		    } else {
+				$el.animate(newDimensions, options);
+			}
 	});
-}
+};
 })(jQuery);
