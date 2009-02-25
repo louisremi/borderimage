@@ -10,6 +10,7 @@
 
 /* TODO:
  * - Empty elements (img, canvas, ...) can't use borderImage without beeing wrapped first.
+ * - Use alphaImageLoader instead of VML
  */
 
 $.fn.borderImage = function(value){
@@ -28,7 +29,7 @@ $.fn.borderImage = function(value){
 		if(!$.browser.support.borderImage && document.createElement('canvas').getContext) {
 			$.browser.support.canvas = true;
 			// Create a global canvas that will be used to draw the slices.
-			bicanvas = document.createElement('canvas');
+			$.fn.borderImage.bicanvas = document.createElement('canvas');
 		}
 		$.fn.borderImage.initialized = true;
 	}
@@ -51,14 +52,14 @@ $.fn.borderImage = function(value){
 	    for(var i = 0; i < argsLength && arguments[i].constructor == String; ++i){
 	    	var img = document.createElement('img');
 	      	img.src = arguments[i];
-			// If we don't clone the image, load event may not fire in IE
+					// If we don't clone the image, load event may not fire in IE
 	      	imageWrapper.appendChild(img.cloneNode(true));
 	    }
 	    imageWrapper.style.position = 'absolute';
 	    imageWrapper.style.visibility = 'hidden';
 	    $('body').prepend(imageWrapper);
-    
-    	var $img = $('img:first', imageWrapper).load(function(){
+		
+		var $img = $('img:first', imageWrapper).load(function(){
 			// Compute cuts
 			var imgHeight 	= $img.height(),
 				imgWidth	= $img.width(),
@@ -69,51 +70,20 @@ $.fn.borderImage = function(value){
 				centerHeight= imgHeight -topCut -bottomCut,
 				centerWidth	= imgWidth -leftCut -rightCut,
 				image = imageWrapper.getElementsByTagName('img'),
+				bicanvas = $.fn.borderImage.bicanvas,
 				// Draw all the slices
-				slice0 = drawSlice(0, 					0, 						leftCut, 		topCut, 		image),
-				slice1 = drawSlice(leftCut, 			0, 						centerWidth,	topCut, 		image),
-				slice2 = drawSlice(leftCut+centerWidth,	0, 						rightCut, 		topCut,			image),
-				slice3 = drawSlice(0, 					topCut, 				leftCut, 		centerHeight,	image),
-				slice4 = drawSlice(leftCut, 			topCut, 				centerWidth,	centerHeight,	image),
-				slice5 = drawSlice(leftCut+centerWidth,	topCut,					rightCut, 		centerHeight,	image),
-				slice6 = drawSlice(0, 					topCut+centerHeight,	leftCut, 		bottomCut,		image),
-				slice7 = drawSlice(leftCut,				topCut+centerHeight,	centerWidth,	bottomCut,		image),
-				slice8 = drawSlice(leftCut+centerWidth,	topCut+centerHeight,	rightCut, 		bottomCut,		image),
+				slice0 = drawSlice(0, 					0, 						leftCut, 		topCut, 		image, imgHeight, imgWidth, bicanvas, resolution),
+				slice1 = drawSlice(leftCut, 			0, 						centerWidth,	topCut, 		image, imgHeight, imgWidth, bicanvas, resolution),
+				slice2 = drawSlice(leftCut+centerWidth,	0, 						rightCut, 		topCut,			image, imgHeight, imgWidth, bicanvas, resolution),
+				slice3 = drawSlice(0, 					topCut, 				leftCut, 		centerHeight,	image, imgHeight, imgWidth, bicanvas, resolution),
+				slice4 = drawSlice(leftCut, 			topCut, 				centerWidth,	centerHeight,	image, imgHeight, imgWidth, bicanvas, resolution),
+				slice5 = drawSlice(leftCut+centerWidth,	topCut,					rightCut, 		centerHeight,	image, imgHeight, imgWidth, bicanvas, resolution),
+				slice6 = drawSlice(0, 					topCut+centerHeight,	leftCut, 		bottomCut,		image, imgHeight, imgWidth, bicanvas, resolution),
+				slice7 = drawSlice(leftCut,				topCut+centerHeight,	centerWidth,	bottomCut,		image, imgHeight, imgWidth, bicanvas, resolution),
+				slice8 = drawSlice(leftCut+centerWidth,	topCut+centerHeight,	rightCut, 		bottomCut,		image, imgHeight, imgWidth, bicanvas, resolution),
 				borderTop, borderRight, borderBottom, borderLeft,
 				prevFragment;
 				
-			function drawSlice(sx, sy, sw, sh, image) {
-				var slice = document.createDocumentFragment();
-				// Don't waste time drawing slice with null dimension
-				if(sw > 0 && sh > 0) {
-					if($.browser.support.canvas) {
-						bicanvas.setAttribute('height', resolution+'px');
-					}			
-					for(var i = 0; i < image.length; ++i) {
-						if($.browser.support.canvas) {
-							// Clear the global canvas and use it to draw a new slice
-							bicanvas.setAttribute('width', resolution+'px');
-							bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, resolution, resolution);
-							// Store the slice in an image in order to reuse it
-							var el = document.createElement('img');
-							el.src = bicanvas.toDataURL();
-						} else {
-							// Could you explain me why we can't just use "document.createElement('biv:image')"?
-							var el = document.createElement('div');
-							el.insertAdjacentHTML('BeforeEnd', 
-								'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />' );
-							el = el.firstChild;
-						}
-						el.style.width = el.style.height = '100%';
-						el.style.position = 'absolute';
-						el.style.border = 'none';
-						el.className = 'biSlice image'+i;
-						slice.appendChild(el);
-					}
-				}
-				return slice;
-			}
-			
 			_this.each(function(i, el){
 				var $this = $(el),
 					thisStyle = {
@@ -127,9 +97,8 @@ $.fn.borderImage = function(value){
 					
 				// There is many case where "display: 'inline'" actually is a problem.
 				// TODO: Try to find exactly where
-				if($this.css('display') == 'inline') {
+				if($this.css('display') == 'inline')
 					thisStyle.display = 'inline-block';
-				}
 				
 				/* When the element is absolute positionned but has a relative
 				 * a relative postionned ancestor, don't change its position.
@@ -174,62 +143,45 @@ $.fn.borderImage = function(value){
 					reuse = false;
 				}
 				
-				function drawBorder(style, slice) {
-					// Don't waste time drawing borders with null dimension
-					if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
-						var el = document.createElement('div');
-						for(var i in style) {
-							el.style[i] = style[i];
-						}
-						el.style.position = 'absolute';
-						el.style.textAlign = 'left';
-						el.appendChild(slice.cloneNode(true));
-						fragment.appendChild(el);
-					}						
-				}
-				
 				// Reuse previous fragment if borderWidths are the same.
 				if(!reuse) {
 					var fragment = document.createDocumentFragment();					
 					
 					// Create the magical tiles
-					drawBorder({top:'-'+borderTop, left:'-'+borderLeft, height: borderTop, width: borderLeft}, 				slice0);
-					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop}, 								slice1);
-					drawBorder({top:'-'+borderTop, right:'-'+borderRight, height: borderTop, width: borderRight}, 			slice2);									
-					drawBorder({top: 0, bottom:0, left:'-'+borderLeft, width: borderLeft, height: '100%'}, 					slice3);					
-					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%'},						slice4);
-					drawBorder({top: 0, bottom:0, right:'-'+borderRight, width: borderRight, height: '100%'}, 				slice5);									
-					drawBorder({bottom:'-'+borderBottom, left:'-'+borderLeft, width: borderLeft, height: borderBottom},		slice6);
-					drawBorder({bottom:'-'+borderBottom, left: 0, width:'100%', height: borderBottom}, 						slice7);
-					drawBorder({bottom:'-'+borderBottom, right:'-'+borderRight, height: borderBottom, width: borderRight},	slice8);
+					drawBorder({top:'-'+borderTop, left:'-'+borderLeft, height: borderTop, width: borderLeft}, 				slice0, fragment);
+					drawBorder({top:'-'+borderTop, left: 0, width: '100%', height: borderTop}, 								slice1, fragment);
+					drawBorder({top:'-'+borderTop, right:'-'+borderRight, height: borderTop, width: borderRight}, 			slice2, fragment);									
+					drawBorder({top: 0, bottom:0, left:'-'+borderLeft, width: borderLeft, height: '100%'}, 					slice3, fragment);					
+					drawBorder({left: 0, top: 0, right: 0, bottom: 0, height: '100%', width: '100%'},						slice4, fragment);
+					drawBorder({top: 0, bottom:0, right:'-'+borderRight, width: borderRight, height: '100%'}, 				slice5, fragment);									
+					drawBorder({bottom:'-'+borderBottom, left:'-'+borderLeft, width: borderLeft, height: borderBottom},		slice6, fragment);
+					drawBorder({bottom:'-'+borderBottom, left: 0, width:'100%', height: borderBottom}, 						slice7, fragment);
+					drawBorder({bottom:'-'+borderBottom, right:'-'+borderRight, height: borderBottom, width: borderRight},	slice8, fragment);
 					
 					prevFragment = fragment;
 				}
 				$this.prepend(prevFragment.cloneNode(true));
 				
 				// height: 100% doesn't work in IE6
-				if($.browser.msie && parseInt($.browser.version) < 7) {
+				if($.browser.msie && parseInt($.browser.version) < 7)
 					el.onpropertychange = function(){
 						$this.find('div:eq(3), div:eq(4), div:eq(5)').css('height', $this.innerHeight());
-					};
-				}								
+					};					
 			});
 		});
 		// Is there an explanation why we need this line to have all the slices actually drawn?
-		if($.browser.support.vml) {
+		if($.browser.support.vml)
 			$('body')[0].appendChild(document.createElement('biv:image'));
-		}
 	}
 	return $(this);	
 };
 
 // Test vml support as early as possible.
-if(!$.browser.support) {
-	$.browser.support = {};
-}		
+if(!$.browser.support)
+	$.browser.support = {};	
 if (document.namespaces && !document.namespaces['biv']) {
 	document.namespaces.add('biv', 'urn:schemas-microsoft-com:vml', "#default#VML");
-	document.createStyleSheet().addRule('biv\\:*', "behavior: url(#default#VML);");
+	document.createStyleSheet().addRule('biv\\: *', "behavior: url(#default#VML);");
 	$.browser.support.vml = true;
 	$.fn.borderImage.initialized = true;
  }
@@ -237,6 +189,51 @@ if (document.namespaces && !document.namespaces['biv']) {
 $.fn.borderImage.defaults = {
 	resolution: 20
 };
+
+function drawSlice(sx, sy, sw, sh, image, imgHeight, imgWidth, bicanvas, resolution) {
+	var slice = document.createDocumentFragment();
+	// Don't waste time drawing slice with null dimension
+	if(sw > 0 && sh > 0) {
+		if($.browser.support.canvas)
+			bicanvas.setAttribute('height', resolution+'px');
+		
+		for(var i = 0; i < image.length; ++i) {
+			if($.browser.support.canvas) {
+				// Clear the global canvas and use it to draw a new slice
+				bicanvas.setAttribute('width', resolution+'px');
+				bicanvas.getContext('2d').drawImage(image[i], sx, sy, sw, sh, 0, 0, resolution, resolution);
+				// Store the slice in an image in order to reuse it
+				var el = document.createElement('img');
+				el.src = bicanvas.toDataURL();
+			} else {
+				// Could you explain me why we can't just use "document.createElement('biv:image')"?
+				var el = document.createElement('div');
+				el.insertAdjacentHTML('BeforeEnd', 
+					'<biv:image src="'+image[i].src+'" cropleft="'+sx/imgWidth+'" croptop="'+sy/imgHeight+'" cropright="'+(imgWidth-sw-sx)/imgWidth+'" cropbottom="'+(imgHeight-sh-sy)/imgHeight+'" />' );
+				el = el.firstChild;
+			}
+			el.style.width = el.style.height = '100%';
+			el.style.position = 'absolute';
+			el.style.border = 'none';
+			el.className = 'biSlice image'+i;
+			slice.appendChild(el);
+		}
+	}
+	return slice;
+}
+
+function drawBorder(style, slice, fragment) {
+	// Don't waste time drawing borders with null dimension
+	if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
+		var el = document.createElement('div');
+		for(var i in style)
+			el.style[i] = style[i];
+		el.style.position = 'absolute';
+		el.style.textAlign = 'left';
+		el.appendChild(slice.cloneNode(true));
+		fragment.appendChild(el);
+	}						
+}
 
 /*
  * Helper function to resize an element potentially decorated with an emulated border-image, using an animation.
@@ -253,9 +250,8 @@ $.fn.biResize = function(newDimensions, options) {
 		        // Resize the internal wrapper instead
 		        $biWrap.animate(newDimensions, options);
 		    // If the native implementation is used, you can resize the element itself
-		    } else {
+		    } else
 				$el.animate(newDimensions, options);
-			}
 	});
 };
 })(jQuery);

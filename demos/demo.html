@@ -3,10 +3,7 @@
 <head>
 	<title>border-image demonstration page</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-	<script type="text/javascript" src="logic/jquery-1.3b1.js"></script>
-	<script type="text/javascript" src="logic/demonstration.js"></script>
-	<script type="text/javascript" src="../jquery.borderImage.js"></script>
+	<!--<meta http-equiv="X-UA-Compatible" content="IE=7" />-->
 	<link media="screen" type="text/css" href="layout/layout.css" rel="stylesheet" />
 	<style type="text/css">
 		/*#flexible {
@@ -44,63 +41,14 @@
 			-moz-border-image: url("media/button2.png") 0 5;
 			-webkit-border-image: url("media/button2.png") 0 5;
 		}
-	</style>
-	<script type="text/javascript">
-	    $(document).ready(function(){
-			// Page layout
-			$('#sidebar').borderImage('url("media/gradient.png") 10 10 0', 100);			
-			$('#content, #bi').borderImage('url("media/shadow.png") 5');
-			
-			// Interactive demonstration
-			$('#innaccessible, #demonstration').css('display', 'inline');
-			backToOrigin();
-			var $demo = $('#demonstration').find('select').change(function(){
-				switchStretch();
-			});
-			
-			// Technical demonstrations
-			$('code.demo').each(function(i, el){
-				var $el = $(el),
-					$prev = $el.parent().parent().prev('div'),
-					result0 = /:\s*(.*?)\s*;/.exec($el.text()),
-					result1 = /:\s*([\d px]*)\s*;/.exec($prev.find('code').text()),
-					style = {
-						border: 'solid transparent',
-						borderWidth: result1[1]
-					};
-				if(result0[1] && result1[1]) {
-					$prev.find(':first').css(style);
-					setTimeout(function(){
-						$prev.find(':first').borderImage(result0[1]);
-					}, 200);
-				}				
-			});
-			
-			/*$('#flex').toggle(function(){
-				$(this).parent().find('span').show('slow');
-			}, function(){
-				$(this).parent().find('span').hide('slow');
-			});*/	
-			
-			$('#buttons a, .button a').borderImage('url("media/button0.png") 0 5', 'media/button1.png', 'media/button2.png')
-			.mouseover(function(){
-				$(this).addClass('bi1')
-			}).mouseout(function(){
-				$(this).removeClass('bi1')
-			}).focus(function(){
-				$(this).addClass('bi2')
-			}).blur(function(){
-				$(this).removeClass('bi2')
-			});
-		});
-	</script>
+	</style>	
 </head>
 <body>
 <div id="header">
 	<h1>Meet a ninja living in browsers</h1>
-	<p><a href="http://www.w3.org/Style/CSS/current-work#CSS3">CSS3 draft</a> introduced, amongst many properties
-	that will change Web designer's life, one that could be terribly powerful: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
-	Discover what it can do, today.</p>
+	<p><a href="http://www.w3.org/Style/CSS/current-work#CSS3">CSS3 draft</a> introduces, amongst many properties
+	that will change a Web designer's life, one that could be terribly powerful: <a href="http://www.w3.org/TR/css3-background/#the-border-image">border-image</a>.<br />
+	Discover what it can do today.</p>
 	
 </div>
 <div class="float">
@@ -112,17 +60,17 @@
 			&lt;table&gt;s.
 		</p>
 		<p>
-			Then came css to relieve all designers with this simple promise: 
+			Then came CSS with the simple promise of
 			<em>Allowing a clear separation between the content and the presentation</em>.
 			But it failed to save them from slicing images with their precious hands
-			and countless, meaningless &lt;div&gt;s, just to please our eyes.
+			and countless, meaningless &lt;div&gt;s, just to create visually pleasing designs.
 		</p>
 		<p>
 			Introducing CSS3 and the border-image property, your personal design ninja.
-			It is now possible to decorate any container, element of a page
-			independently of it's position and dimensions in a flash.
-			Just design and describe how you would have sliced;
-			sit back and let a ninja do the dirty job.
+			It is now possible to decorate any container or element of a page
+			independently of its position and dimensions in a flash.
+			Just design and describe how you would've sliced;
+			sit back and let a ninja do the dirty work.
 		</p>
 		<p class="center">
 			<a href="http://creativecommons.org/licenses/by-sa/2.0/fr/deed.fr" rel="license">
@@ -168,40 +116,40 @@
 	</p>
 	<p>
 		The second property is the one which will actually invoke our zealous ninja.
-		There is usually three parts in a border-image property (although if you read carefully the specification, you will
-		find a fourth one which would only be confusing at this point):
+		There are usually three parts in a border-image property (although if you read the specification carefully, you will
+		find a fourth one, which would only be confusing at this point):
 	</p>
 	<ol>
 		<li>
 			<pre><code>url("border.png")</code></pre>
-			This part indicate the location of the image that will be sliced to decorate our element. 
-			Nothing really original here, background-image use the same syntax. And this is our image:
+			This part indicates the location of the image that will be sliced to decorate our element. 
+			Nothing really original here, the background-image uses the same syntax. And this is our image:
 			<span class="center"><img src="media/border.png" alt="the image that we are gonna slice"></span>
 		</li>
 		<li>
 			<pre><code>30% 35% 40% 30%</code></pre>
-			The second part describe the way our ninja will slice the image into nine parts (<i>slices</i>):
+			The second part describes the way our ninja will slice the image into nine parts (<i>slices</i>):
 			<span class="center">
 				<img src="media/sliceHere.png" alt="instructions for our ninja to cut the image"><br/>
 				<i>Guess what will happen to this poor image... (hint: ninjas are merciless).</i><br/>
 			</span>
-			Those values can be expressed either in percentage 
+			Those values can be expressed either in percentages
 			or without any unit to slice an exact width of pixels from the image.
 		</li>		
 		<li>
 			<pre><code>round round</code></pre>
 			The last part is the <i>stretch value</i>.
 			It describes how the slices for the sides and the middle part are scaled and tiled.
-			Few things to remember:
+			A few things to remember:
 			<ul>
-				<li>Specifying only one value is the same as specifying twice the same one,</li>
-				<li>there is three possible values: "<i>stretch</i>", "<i>repeat</i>" and "<i>round</i>",</li>
+				<li>specifying only one value is the same as specifying twice the same one,</li>
+				<li>there are three possible values: "<i>stretch</i>", "<i>repeat</i>" and "<i>round</i>",</li>
 				<li>the default value is "<i>stretch</i>".</li>
 			</ul>					 
 		</li>
 	</ol>
 	<p id="innaccessible" style="display:none;">
-		This is the most complex part of the specification so it deserves an interactive demonstration:
+		This is the most complex part of the specification, so it deserves an interactive demonstration:
 	</p>			
 	<div id="demonstration" style="display:none;">
 		<span class="center"><img src="media/diamonds.png" /></span>
@@ -220,7 +168,7 @@
 	<h2>See what it can do</h2>
 	<p>
 		You have the resources to be creative, imaginative and you certainly have an opinion about beauty. 
-		The border-image ninja doesn't know anything about that, it is just really good at martial techniques, 
+		The border-image ninja doesn't know anything about that, it is just really good at martial techniques; 
 		it is only a tool allowing you to express yourself.
 		Here is what it can do when asked for some purely technical demonstrations:
 	</p>
@@ -290,8 +238,7 @@
 		<li>
 			<a href="http://msdn.microsoft.com/en-us/library/bb263898(VS.85).aspx">VML</a>,
 			its <a href="http://msdn.microsoft.com/en-us/library/bb229512(VS.85).aspx">image element</a> 
-			and the "<i>croptop</i>", "<i>cropright</i>", "<i>cropbottom</i>", "<i>cropleft</i>" properties
-			available in ie6+.
+			and its <i>crop</i> properties available in ie6+.
 		</li>
 	</ul>
 	<p>
@@ -306,8 +253,8 @@
 	<h2>Limits of border-image</h2>
 	<p>
 		This property is not implemented in all browsers. 
-		Although it is possible to emulate it, one can neither expect same level of quality, performance nor
-		conformance to the specification. 
+		Although it is possible to emulate it, one can neither expect the same level of quality, performance nor
+		conformity to the specification. 
 		Moreover, it cannot be done without alterations to the DOM of Web pages:		
 	</p>
 	<ul>
@@ -320,11 +267,11 @@
 		Only the <i>stretch</i> keyword can be implemented.
 		Supporting both <i>repeat</i> and <i>round</i> would involve creation of countless background &lt;img&gt;s
 		(which is not reasonable for performance reasons),
-		and it would anyway be impossible to make them scale dynamically with the element.
+		and it would be impossible to make them scale dynamically with the element.
 	</p>
 	<h2>A useful ninja for modern Web design</h2>
 	<p>
-		Nowadays, there is too many browsers available, too many operating system being used (each one with its own set of fonts), 
+		Nowadays, there are too many browsers available, too many operating systems being used (each one with its own set of fonts), 
 		resulting in so many configurations that trying to create a cross-browser pixel-perfect Web design appears to be a dead end.
 		You should rather consider building Web design using simple tools such as <i>border-image</i> that degrade gracefully
 		in older browsers but always keep a clear separation between content and presentation, thus easing maintenance of your code.
@@ -335,12 +282,12 @@
 	<p>
 		This page uses a script that is a partial implementation of border-image, 
 		packaged as a plugin for the popular <a href="http://www.jquery.com">jQuery</a> library.
-		Dependence upon jQuery features has been kept minimal in order to ease reuse of the script with
+		Dependence on jQuery features has been kept minimal in order to ease reuse of the script with
 		other popular libraries. Following is the kind of JavaScript code to write instead of using the css property:
 	</p>
 <pre><code>$('#element').borderImage('url("border.png") 30% 35% 40% 30%');</code></pre>
 	<p>
-		Depending on browser features, this script will either use native implementation of the css property,
+		Depending on browser features, this script will either use native implementation of the CSS property,
 		or try to use canvas or vml instead. 
 		It is only a partial implementation of the property since only the <i>stretch</i> value is available, for reasons explained above.
 		It works better on <i>block</i> or <i>inline-block</i> displayed elements;
@@ -353,11 +300,11 @@
 	<p>
 		Everyone is encouraged to port this piece of code to his/her favorite JavaScript library 
 		and to encourage other people to use it : )
-		I will be happy to provide help on that purpose: <a href="mailto:public@lrbabe.com">public@lrbabe.com</a>
+		I will be happy to provide help with this: <a href="mailto:public@lrbabe.com">public@lrbabe.com</a>
 	</p>
 	<h3>Browsers compatibility</h3>
 	<p>
-		jquery.borderImage.js has been tested on following browsers:
+		jquery.borderImage.js has been tested on the following browsers:
 	<ul>
 		<li>Firefox 2.*, Firefox 3, Firefox 3.1</li>
 		<li>Safari 3.*</li>
@@ -366,23 +313,22 @@
 		<li>IE7</li>
 	</ul>
 	<p>
-		There is still a bug on IE6 that prevents to use it on large elements (more than 100px wide or tall)
-		and there is some graphical glitches when using transparent/semi-transparent png images.
-		IE8, still in development, suffers from a major regression: it is no more possible to dynamically
-		create vml elements (see <a href="https://connect.microsoft.com/IE/feedback/ViewFeedback.aspx?FeedbackID=333905">related bug on Microsoft Connect</a>).
-		Hopefully this will be fixed in the final version. In the mean time, the IE7 meta tag can be used:
+		There is still a bug on IE6 that prevents its use on large elements (more than 100px wide or tall)
+		and there are some graphical glitches when using transparent/semi-transparent png images. 
+		The way VML is handled in IE8 also changed a little bit and a fix is on its way to make the script
+		compatible with this browser. In the mean time, the IE7 meta tag can be used:
 	</p>
 <pre><code>&lt;meta http-equiv="X-UA-Compatible" content="IE=7" /&gt;</code></pre>
 	<h3>Resizing an element dynamically</h3>
 	<p>
-		When dynamically resizing an element, every slices but the edges are supposed to be scaled seamlessly.
+		When dynamically resizing an element, every slice but the edges are supposed to be scaled seamlessly.
 		However, when using an animation (such as jQuery's <i>animate</i> function), 
-		border slices temporarily disappear when resizing directly the element if border-image is emulated.
+		border slices temporarily disappear when resizing the element directly if border-image is emulated.
 		One should rather resize the content of the element or use the provided helper function:
 	</p>
 <pre><code>$('#element').biResize({height: '200px', width: '300px'}, options);</code></pre>
 	<p>
-		Note that it is not possible to dynamically resize borders' widths.
+		Note that it is not possible to dynamically resize the borders' widths.
 	</p>
 	<!--<h3>Using stretching background</h3>
 	<p>
@@ -393,7 +339,7 @@
 	</p>-->
 	<h3>Creating multi-state buttons</h3>
 	<p>
-		Browsers supporting natively border-image could be asked to slice a different
+		Browsers supporting border-image natively could be asked to slice a different
 		image for each state of the button:
 	</p>
 <pre><code>    .button a {
@@ -409,8 +355,8 @@
         -webkit-border-image: url("media/button2.png") 0 5;
     }</code></pre>
 	<p>
-		But in browsers emulating border-image, performance is an issue for this kind of operations,
-		buttons would flicker each time their state change if using this kind of code:
+		But in browsers emulating border-image, performance is an issue for this kind of operation,
+		buttons would flicker each time their state changed if using this kind of code:
 	</p>
 <pre><code>$('.button a').borderImage('url("media/button0.png") 0 5')
     .mouseover('url("media/button1.png") 0 5')
@@ -428,9 +374,9 @@
 );</code></pre>
 	<span class="center"><i>Slices from each image will be </i>tagged<i> with a different class</i> (image0, image1, ...)</span>
 	<p>
-		But borderImage isn't aware what image correspond to what event.
+		But borderImage isn't aware what image corresponds to what event.
 		A hybrid JavaScript/css solution has to be used for that purpose.
-		Note that browsers with native implementation have to be handled separatly in css when using the <i>alternative image syntax</i>. 
+		Note that browsers with native implementation have to be handled separately in CSS when using the <i>alternative image syntax</i>. 
 	</p>
 <pre><code>&lt;script&gt;
     $('.button a').borderImage(
@@ -493,5 +439,51 @@
 &lt;style&gt;
 </code></pre>
 </div>
+	<script type="text/javascript" src="logic/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="logic/demonstration.js"></script>
+	<script type="text/javascript" src="../jquery.borderImage.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			// Page layout
+			$('#sidebar').borderImage('url("media/gradient.png") 10 10 0', 100);			
+			$('#content, #bi').borderImage('url("media/shadow.png") 5');
+			
+			// Interactive demonstration
+			$('#innaccessible, #demonstration').css('display', 'inline');
+			backToOrigin();
+			var $demo = $('#demonstration').find('select').change(function(){
+				switchStretch();
+			});
+			
+			// Technical demonstrations
+			$('code.demo').each(function(i, el){
+				var $el = $(el),
+					$prev = $el.parent().parent().prev('div'),
+					result0 = /:\s*(.*?)\s*;/.exec($el.text()),
+					result1 = /:\s*([\d px]*)\s*;/.exec($prev.find('code').text()),
+					style = {
+						border: 'solid transparent',
+						borderWidth: result1[1]
+					};
+				if(result0[1] && result1[1]) {
+					$prev.find(':first').css(style);
+					setTimeout(function(){
+						$prev.find(':first').borderImage(result0[1]);
+					}, 200);
+				}				
+			});
+			
+			$('#buttons a, .button a').borderImage('url("media/button0.png") 0 5', 'media/button1.png', 'media/button2.png')
+			.mouseover(function(){
+				$(this).addClass('bi1')
+			}).mouseout(function(){
+				$(this).removeClass('bi1')
+			}).focus(function(){
+				$(this).addClass('bi2')
+			}).blur(function(){
+				$(this).removeClass('bi2')
+			});
+		});
+	</script>
 </body>
 </html>
