@@ -89,16 +89,21 @@ $.fn.borderImage = function(value){
 					thisStyle = {
 						position: 'relative',
 						borderColor: 'transparent',
-						background: 'none',
+						//background: 'none',
 						padding: 0
 					},
 					innerWrapper = document.createElement('div'),
-					reuse = true;
+					reuse = true,
+					thisDisplay = $this.css('display');
 					
 				// There is many case where "display: 'inline'" actually is a problem.
-				// TODO: Try to find exactly where
-				if($this.css('display') == 'inline')
-					thisStyle.display = 'inline-block';
+				if(thisDisplay == 'inline')
+					thisStyle.display = 'inline-block';					
+				// IE7 Should be served inline instead of inline-block
+				else if((($.browser.msie && $.browser.version == 7) 
+					|| (document.documentMode && document.documentMode == 7)) 
+				&& $this.css('display') == 'inline-block')
+						thisStyle.display = 'inline';
 				
 				/* When the element is absolute positionned but has a relative
 				 * a relative postionned ancestor, don't change its position.
@@ -112,12 +117,6 @@ $.fn.borderImage = function(value){
 					} while (el = el.parentNode);
 				}			
 					
-				// Workaround MSIE6 transparent border bug
-				if($.browser.msie && parseInt($.browser.version) < 7){
-					thisStyle.borderColor = '#808180';
-					thisStyle.filter = 'chroma(color=#808180)';					
-				}
-				
 				innerWrapper.style.paddingTop = $this.css('paddingTop');
 				innerWrapper.style.paddingLeft = $this.css('paddingLeft');
 				innerWrapper.style.paddingBottom = $this.css('paddingBottom');
@@ -160,13 +159,7 @@ $.fn.borderImage = function(value){
 					
 					prevFragment = fragment;
 				}
-				$this.prepend(prevFragment.cloneNode(true));
-				
-				// height: 100% doesn't work in IE6
-				if($.browser.msie && parseInt($.browser.version) < 7)
-					el.onpropertychange = function(){
-						$this.find('div:eq(3), div:eq(4), div:eq(5)').css('height', $this.innerHeight());
-					};					
+				$this.prepend(prevFragment.cloneNode(true));							
 			});
 		});
 		// Is there an explanation why we need this line to have all the slices actually drawn?

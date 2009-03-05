@@ -19,6 +19,28 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient3441">
+      <stop
+         id="stop3443"
+         offset="0"
+         style="stop-color:#818181;stop-opacity:1;" />
+      <stop
+         id="stop3445"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2659">
+      <stop
+         style="stop-color:#818181;stop-opacity:1;"
+         offset="0"
+         id="stop2661" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop2663" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient3113">
       <stop
          style="stop-color:#1c1c1c;stop-opacity:1;"
@@ -225,18 +247,6 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 526.18109 : 1"
        sodipodi:type="inkscape:persp3d" />
-    <filter
-       inkscape:collect="always"
-       id="filter3680"
-       x="-0.18269016"
-       width="1.3653803"
-       y="-0.82210571"
-       height="2.6442114">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.68508809"
-         id="feGaussianBlur3682" />
-    </filter>
     <filter
        inkscape:collect="always"
        id="filter3746"
@@ -1164,16 +1174,6 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 403.47406 : 1"
        sodipodi:type="inkscape:persp3d" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3113"
-       id="linearGradient3119"
-       x1="78.943733"
-       y1="736.95319"
-       x2="78.943733"
-       y2="816.95319"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.5,0,0,1,38.971866,0)" />
     <filter
        inkscape:collect="always"
        id="filter3502">
@@ -1194,6 +1194,38 @@
          stdDeviation="2.753304"
          id="feGaussianBlur4333" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3635"
+       x="-0.34922892"
+       width="1.6984578"
+       y="-0.380977"
+       height="1.761954">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="3.4922892"
+         id="feGaussianBlur3637" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2659"
+       id="linearGradient2665"
+       x1="308.5"
+       y1="131.375"
+       x2="308.5"
+       y2="151.375"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(3.875,-1)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3441"
+       id="linearGradient3439"
+       gradientUnits="userSpaceOnUse"
+       x1="308.5"
+       y1="131.375"
+       x2="308.5"
+       y2="151.375"
+       gradientTransform="translate(23.375,-1.5128169)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1205,9 +1237,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.4815756"
-     inkscape:cx="426.15759"
-     inkscape:cy="857.83295"
+     inkscape:zoom="8"
+     inkscape:cx="301.22762"
+     inkscape:cy="905.90961"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1230,24 +1262,6 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="opacity:1;fill:#000000;fill-opacity:0;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3685"
-       width="9"
-       height="3"
-       x="267.45563"
-       y="282.51779"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/verticalShadow.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <rect
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3680)"
-       id="rect3214"
-       width="9"
-       height="2"
-       x="558.69983"
-       y="583.33087"
-       transform="matrix(0.7777778,0,0,2.2272471,-166.08869,-1017.0429)" />
     <path
        style="opacity:1;fill:url(#linearGradient2396);fill-opacity:1;stroke:#ffffff;stroke-width:0.1439589;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 192.13273,281.11456 C 187.08413,281.11456 183.01564,285.16658 183.01564,290.19477 L 183.01564,303.9706 L 204.87169,303.9706 L 204.87169,290.19477 C 204.87169,285.16659 200.80319,281.11456 195.75459,281.11456 L 192.13273,281.11456 z"
@@ -1517,30 +1531,6 @@
        y="216.64984"
        rx="7.3214288"
        ry="7.7793403" />
-    <rect
-       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3212"
-       width="5"
-       height="3"
-       x="269.45563"
-       y="282.51779"
-       rx="0"
-       ry="0"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/verticalShadow.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <rect
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3210"
-       width="3"
-       height="3"
-       x="270.45563"
-       y="282.51779"
-       rx="0"
-       ry="0"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/verticalShadow.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
     <g
        transform="translate(196.41422,127.62321)"
        id="g2529"
@@ -1833,105 +1823,6 @@
          id="tspan3280"
          x="405.36786"
          y="229.48811">Slice here</tspan></text>
-    <path
-       style="opacity:0.8008299;fill:#323232;fill-opacity:1;stroke:#ffffff;stroke-width:1.25862074;stroke-opacity:1"
-       d="M 364.27747,76.42995 C 363.27393,76.42995 362.28818,76.5285 361.33997,76.7112 L 361.33997,88.6487 L 389.15247,88.6487 C 387.74352,81.65685 381.60285,76.42995 374.18372,76.42995 L 364.27747,76.42995 z"
-       id="path3332" />
-    <path
-       style="opacity:0.8008299;fill:#323232;fill-opacity:1;stroke:none;stroke-width:1.25862074;stroke-opacity:1"
-       d="M 360.38462,59.15316 C 355.52395,60.32485 351.71578,64.9471 350.73729,70.88083 L 360.38462,70.88083 L 360.38462,59.15316 z"
-       id="path3330"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/topLeftEdge.png"
-       inkscape:export-xdpi="188.41077"
-       inkscape:export-ydpi="188.41077" />
-    <path
-       style="opacity:0.8008299;fill:#323232;fill-opacity:1;stroke:#ffffff;stroke-width:1.25862074;stroke-opacity:1"
-       d="M 349.30872,88.7112 C 349.11751,89.68007 348.99622,90.68458 348.99622,91.7112 L 348.99622,101.61745 C 348.99622,109.05776 354.25601,115.20078 361.27747,116.5862 L 361.27747,88.7112 L 349.30872,88.7112 z"
-       id="path3328" />
-    <path
-       style="opacity:0.8008299;fill:#323232;fill-opacity:1;stroke:#ffffff;stroke-width:1.25862074;stroke-opacity:1"
-       d="M 361.33997,88.7112 L 361.33997,116.61745 C 362.28883,116.80045 363.27353,116.8987 364.27747,116.8987 L 374.18372,116.8987 C 382.65064,116.8987 389.46498,110.08436 389.46497,101.61745 L 389.46497,91.7112 C 389.46497,90.68459 389.34368,89.68007 389.15247,88.7112 L 361.33997,88.7112 z"
-       id="rect3284" />
-    <rect
-       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.634;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3770)"
-       id="rect3286"
-       width="17.311501"
-       height="17.311501"
-       x="241.16566"
-       y="841.77771"
-       rx="6.5399008"
-       ry="6.5399008"
-       transform="matrix(1.0567335,0,0,1.0567335,105.22923,-802.01887)"
-       inkscape:export-filename="/home/lrbabe/Bureau/lrbabe/border.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.634;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3288"
-       width="16.418644"
-       height="16.418644"
-       x="361.01456"
-       y="88.453323"
-       rx="6.202599"
-       ry="6.202599"
-       inkscape:export-filename="/home/lrbabe/Bureau/lrbabe/border.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#d70000;stroke-width:0.85240757;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.70481506, 0.85240753;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 343.09917,102.45123 L 395.34863,102.45123"
-       id="path3292"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/sliceHere.png"
-       inkscape:export-xdpi="248.8"
-       inkscape:export-ydpi="248.8" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff7979;stroke-width:0.8362276;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.67245519, 0.8362276;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 376.13654,71.54 L 376.13654,121.78534"
-       id="path3294"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/sliceHere.png"
-       inkscape:export-xdpi="248.8"
-       inkscape:export-ydpi="248.8" />
-    <text
-       xml:space="preserve"
-       style="font-size:6px;font-style:normal;font-weight:normal;fill:#ff7979;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="71.089066"
-       y="-381.53107"
-       id="text3302"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/sliceHere.png"
-       inkscape:export-xdpi="248.8"
-       inkscape:export-ydpi="248.8"
-       transform="matrix(0,1,-1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3304"
-         x="71.089066"
-         y="-381.53107">35%</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:6px;font-style:normal;font-weight:normal;fill:#d80000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="379.24268"
-       y="110.85475"
-       id="text3306"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/sliceHere.png"
-       inkscape:export-xdpi="248.8"
-       inkscape:export-ydpi="248.8"><tspan
-         sodipodi:role="line"
-         id="tspan3308"
-         x="379.24268"
-         y="110.85475">40%</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:6px;font-style:normal;font-weight:normal;fill:#9c0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="105.73665"
-       y="-352.45026"
-       id="text3310"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/sliceHere.png"
-       inkscape:export-xdpi="248.8"
-       inkscape:export-ydpi="248.8"
-       transform="matrix(0,1,-1,0,0,0)"><tspan
-         sodipodi:role="line"
-         id="tspan3312"
-         x="105.73665"
-         y="-352.45026">30%</tspan></text>
     <rect
        style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-opacity:1"
        id="rect3334"
@@ -2156,16 +2047,6 @@
          y="234.11072"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Century Schoolbook L;-inkscape-font-specification:Century Schoolbook L">diamonds.png</tspan></text>
     <rect
-       style="opacity:1;fill:url(#linearGradient3119);fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3111"
-       width="1"
-       height="80"
-       x="77.943733"
-       y="736.95319"
-       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/headerbg.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
        inkscape:export-filename="/home/lrbabe/Bureau/lrbabe/border.png"
@@ -2305,6 +2186,54 @@
        rx="0"
        ry="0"
        inkscape:export-filename="/home/lrbabe/Bureau/tab.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g3542"
+       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/betterShadow.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         y="366.07721"
+         x="423.93863"
+         height="17.9995"
+         width="18"
+         id="rect3532"
+         style="fill:#ffffff;fill-opacity:0;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         transform="matrix(0.4635417,0,0,0.5056818,237.33773,184.69133)"
+         rx="0"
+         ry="0"
+         y="365.47"
+         x="409.86133"
+         height="22"
+         width="24"
+         id="rect3426"
+         style="fill:#3a3a3a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter3635)" />
+      <rect
+         rx="0"
+         ry="0"
+         y="372.04092"
+         x="429.90009"
+         height="6.0488348"
+         width="5.9758773"
+         id="rect2653"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="opacity:1;fill:url(#linearGradient2665);fill-opacity:1;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 307.875,130.375 C 306.49,130.375 305.375,131.49 305.375,132.875 L 305.375,150.375 L 319.375,150.375 L 319.375,132.875 C 319.375,131.49 318.26,130.375 316.875,130.375 L 307.875,130.375 z"
+       id="rect2654"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/gradtab1.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:1;fill:url(#linearGradient3439);fill-opacity:1.0;stroke:none;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 327.375,129.86218 C 325.99,129.86218 324.875,130.97718 324.875,132.36218 L 324.875,149.86218 L 338.875,149.86218 L 338.875,132.36218 C 338.875,130.97718 337.76,129.86218 336.375,129.86218 L 327.375,129.86218 z"
+       id="path3437"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/lrbabe/workspace/borderImage/demos/media/gradtab2.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
   </g>

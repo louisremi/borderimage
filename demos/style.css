@@ -18,13 +18,14 @@ body {
 	margin: 0 0 100px;
 }
 
-#content, #bi {
+#main {
 	width: 620px;
 	padding: 0 5px;
 	border: 10px solid transparent;
+	
 }
 
-#content h2.first, #bi h2.first {
+.tab h2.first {
 	margin-top: 0;
 }
 
@@ -53,20 +54,6 @@ body {
 	margin-top: 0;
 }
 
-/*#buttons {
-	text-align: center;
-}
-
-#buttons a, #buttons a:hover, #buttons a:visited {
-	color: black;
-	text-decoration: none;
-	outline: none;
-}*/
-
-
-
-
-
 code {
 	color: #800000;
 }
@@ -79,7 +66,7 @@ a:hover {
 	color: red;
 	text-decoration: underline;
 }
-#content li, #bi li {
+.tab li {
 	line-height: 1.2em;
 	margin-top: 5px;
 }
@@ -95,4 +82,48 @@ li .center {
 
 .right {
 	text-align: right;
+}
+
+#nav {
+	background-color: black;
+	-moz-border-radius: 1%;
+	-o-border-radius: 1%;
+	-webkit-border-radius: 1%;
+	height: 30px;
+	margin: 7px auto;
+	padding: 3px 1em 0;
+	list-style: none;
+}
+
+#nav li {
+	display: inline-block;
+	height: 24px;
+	border: solid transparent;
+	border-width: 6px 6px 0;
+	margin-right: 4px;
+}
+
+#nav a {	
+	color: black;
+}
+
+#nav a:hover {
+	color: white;
+	text-decoration: none;
+}
+
+#nav a:focus {
+	outline: none;
+}
+
+#nav li.selected a {
+	color: black;
+}
+
+#nav .image1 {
+	z-index: -1;
+}
+
+#nav .selected .image1 {
+	z-index: 0;
 }

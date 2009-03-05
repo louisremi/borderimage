@@ -3,13 +3,9 @@
 <head>
 	<title>border-image demonstration page</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!--<meta http-equiv="X-UA-Compatible" content="IE=7" />-->
-	<link media="screen" type="text/css" href="layout/layout.css" rel="stylesheet" />
+	<meta http-equiv="X-UA-Compatible" content="IE=7" />
+	<link media="screen" type="text/css" href="style.css" rel="stylesheet" />
 	<style type="text/css">
-		/*#flexible {
-			border: 20px solid transparent;
-		}*/
-		
 		.button a {
 			border: solid transparent;
 			border-width: 0 8px;
@@ -79,8 +75,15 @@
 		</p>
 	</div>
 </div>
-	
-<div id="content">
+
+<div id="main">
+	<ul id="nav">
+		<li class="selected"><a href="#css3">The CSS property</a></li>
+		<li><a href="#script">The script</a></li>
+		<li><a href="#images">Base images</a></li>
+		<li><a href="#advanced">Advanced use</a></li>
+	</ul>
+<div class="tab" id="css3">
 	<h2 class="first">Learn its code</h2>
 	<p>Let's start with a simple example to see how the border-image ninja can be invoked and given instructions:</p>
 <pre><code>#element {
@@ -248,7 +251,7 @@
 	</p>
 	<span class="center"><img src="media/katanas.png" alt="four katanas slicing an image"></span>
 	<p>
-		There is such a ninja living in this very page: <a href="#bi">jquery.borderImage.js</a>.
+		There is such a ninja living in this very page: <a href="#script">jquery.borderImage.js</a>.
 	</p>
 	<h2>Limits of border-image</h2>
 	<p>
@@ -277,7 +280,7 @@
 		in older browsers but always keep a clear separation between content and presentation, thus easing maintenance of your code.
 	</p>
 </div>
-<div id="bi">
+<div class="tab" id="script">
 	<h2 class="first">A first implementation: jquery.borderImage.js</h2>
 	<p>
 		This page uses a script that is a partial implementation of border-image, 
@@ -439,14 +442,21 @@
 &lt;style&gt;
 </code></pre>
 </div>
-	<script type="text/javascript" src="logic/jquery-1.3.2.js"></script>
-	<script type="text/javascript" src="logic/demonstration.js"></script>
+<div class="tab" id="images">Blah</div>
+<div class="tab" id="advanced">Blah blah</div>
+</div>
+	<script type="text/javascript" src="jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="demonstration.js"></script>
 	<script type="text/javascript" src="../jquery.borderImage.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			// Page layout
 			$('#sidebar').borderImage('url("media/gradient.png") 10 10 0', 100);			
-			$('#content, #bi').borderImage('url("media/shadow.png") 5');
+			$('#main').borderImage('url("media/betterShadow.png") 8');
+			
+			$('#nav li').borderImage('url("media/gradtab2.png") 6 6 0', 'media/gradtab1.png' );
+			
+			$('.tab:gt(0)').hide();
 			
 			// Interactive demonstration
 			$('#innaccessible, #demonstration').css('display', 'inline');
@@ -471,6 +481,19 @@
 						$prev.find(':first').borderImage(result0[1]);
 					}, 200);
 				}				
+			});
+			
+			$('#nav').click(function(e) {
+				var target = e.target;
+				if(target.nodeName != 'UL') {
+					while(target.nodeName != 'LI')
+						target = target.parentNode;
+					if(target.className != 'selected') {						
+						$(this).find('li').removeClass('selected');
+						$('.tab').hide();
+						$($(target).addClass('selected').find('a').attr('href')).show();
+					}
+				}
 			});
 			
 			$('#buttons a, .button a').borderImage('url("media/button0.png") 0 5', 'media/button1.png', 'media/button2.png')
